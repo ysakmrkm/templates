@@ -1,0 +1,56 @@
+@mixin layout-tags {
+	html ,
+	body {
+		height:100%;
+	}
+
+	html {
+		-pie-load-path:"http://any.server/path/to/pie-js-files/PIE.htc";
+	}
+
+	body {
+		-webkit-text-size-adjust:100%;
+	}
+}
+
+@mixin layout-container {
+	#container {
+		position:relative;
+		min-height:100%;
+
+		* html & {
+			height:100%;
+		}
+
+		body > & {
+			height:auto;
+		}
+	}
+}
+
+@mixin common {
+	//placeholderでやる必要性を検討
+	%pie {
+		@include pie-element(relative);
+	}
+}
+
+@mixin layout-header {
+}
+
+@mixin layout-content {
+}
+
+@mixin layout-main {
+}
+
+@mixin layout-sub {
+}
+
+@mixin layout-footer {
+	#footer {
+		position:absolute;
+		bottom:0;
+		width:100%;
+	}
+}

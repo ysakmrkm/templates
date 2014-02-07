@@ -1,0 +1,35 @@
+<?php
+/*==========================================================================================
+エントリーリスト表示用関数
+
+function entrylist($entry_y,$entry_m,$entry_d){
+global $showdays;
+
+do something..
+}
+
+$showdays :表示期間
+$entry_y :エントリー投稿年
+$entry_m :エントリー投稿月
+$entry_d :エントリー投稿日
+
+==========================================================================================*/
+function newicon($entry_y,$entry_m,$entry_d){
+
+global $showdays;
+
+$entry_y = (int) $entry_y;
+$entry_m = (int) $entry_m;
+$entry_d = (int) $entry_d;
+
+if($entry_y == NULL || $entry_m == NULL || $entry_d == NULL){return;}
+
+$today = mktime(0,0,0,date("n"),date("d"),date("y"));
+
+$enddate = mktime(0,0,0,$entry_m,$entry_d+$showdays,$entry_y);
+
+if($today <= $enddate){
+return '<span class="new"><img src="<$mt:websiteurl$>img/icon_new.gif" alt="NEW" /></span>';
+}
+}
+?>

@@ -1,0 +1,96 @@
+<?php
+/*==========================================================================================
+エントリーリスト表示用関数
+
+function entrylist($entrylist , $page = 1 , $dispnum = 10 , $status = "qa"){
+do something..
+}
+
+$entrylist : エントリーリスト配列
+$entrylist[i]["year"]: エントリー投稿年
+$entrylist[i]["month"]: エントリー投稿月
+$entrylist[i]["day"]: エントリー投稿日
+$entrylist[i]["date"]: エントリー投稿年月日
+$entrylist[i]["category"]: エントリーカテゴリー（配列の場合も有り）
+$entrylist[i]["catlink"]: エントリーカテゴリーリンク（配列の場合も有り）
+$entrylist[i]["catbasename"]: エントリーカテゴリーファイル名（配列の場合も有り）
+$entrylist[i]["title"]: エントリータイトル
+$entrylist[i]["body"]: エントリー本文
+$entrylist[i]["link"]: エントリーリンク
+
+$page : 開始ページ番号（初期値 : 1）
+$dispnum : 1ページ表示件数（初期値 : 10）
+$status : 使用ページ変数（qa = 相談集（初期値） , blog = ブログ）
+
+==========================================================================================*/
+
+function entrylist($entrylist , $page = 1 , $dispnum = 10 , $status = "qa"){
+
+//if($page === NULL){
+//$page = 1;
+//}
+
+if($_GET['page'] !== NULL){
+$page = $_GET['page'];
+}
+
+if($page == 1){
+$startnum = 1; //件数表示 開始番号
+}
+else {
+$startnum = ($page - 1) * $dispnum + 1;
+}
+
+$list = array_slice($entrylist , $startnum - 1 , $dispnum);
+
+//リスト 表示
+if($status != "blog"){
+echo '<ol class="entrylist">',"\n";
+}
+
+$j = 0;
+foreach($list as $key => $val){
+if($status == "qa"){
+echo '<li';
+if(count($list) == 1){
+echo ' class="one"';
+} else if($j == 0){ echo ' class="first"';}
+if($j == count($list) - 1 && count($list) != 1){
+echo ' class="last';
+if($j % 2 == 1){echo ' even';}
+echo '"';
+} else if($j % 2 == 1){echo ' class="even"';}
+echo '>
+<dl class="clearfix">
+<dt class="title"><a href="',$list[$key]["link"],'">',$list[$key]["title"],'</a>',newicon($entrylist[$key]["year"],$entrylist[$key]["month"],$entrylist[$key]["day"]),'</dt>
+<dd class="cat">[',"\n";
+$k = 0;
+foreach($val as $key2 => $val2){
+if($key2 == "category"){
+echo "<ul>\n";
+foreach($val2 as $key3 => $val3){
+echo '<li';
+if($k == 0){ echo ' class="first"';}
+echo '><a href="',$list[$key]["catlink"][$key3],'">',preg_replace('/^[0-9]+0([^0])([^0-9].*)$/','$1$2',$list[$key]["category"][$key3]),'</a></li>',"\n";
+$k++;
+}
+echo "</ul>\n";
+}
+}
+echo ']</dd>
+<dd class="date">',$list[$key]["date"],'</dd>
+</dl>
+</li>',"\n";
+}
+
+$j++;
+
+}
+
+if($status != "blog"){
+echo '</ol>';
+}
+
+}
+
+?>

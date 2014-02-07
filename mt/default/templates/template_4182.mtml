@@ -1,0 +1,125 @@
+<mt:blogparentwebsite><$mt:websiteid setvar="websiteid"$></mt:blogparentwebsite>
+<?php
+include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^/].*)\/$/","$1"$>/lib/constants.php";
+include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1"regex_replace="/(.*)\/([^/].*)\/$/","$1"$>/lib/mail/mail.php";
+
+echo '<?xml version="1.0" encoding="UTF-8"?>',"\n";
+?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ja" xml:lang="ja">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=<$mt:PublishCharset$>" />
+<title><$mt:include module="title" blog_id="$websiteid" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$></title>
+<meta name="keywords" content="<$mt:include module="keyword" blog_id="$websiteid" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>" />
+<meta name="description" content="<$mt:include module="description" blog_id="$websiteid" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>" />
+<meta name="generator" content="<$mt:ProductName version="1"$>" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<meta http-equiv="content-script-type" content="text/javascript" />
+<meta http-equiv="content-style-type" content="text/css" />
+<link rel="canonical" href="<$mt:websiteurl$><mt:unless name="main_index"><mt:ifnonempty tag="folderlabel"><$mt:folderpath$>/</mt:ifnonempty><mt:unless tag="pagebasename" eq="index"><$mt:pagebasename$><$mt:websitefileextension$></mt:unless></mt:unless>"/>
+<mt:blogparentwebsite>
+<link rel="start" href="<$mt:websiteurl$>" title="Home" />
+<mt:ignore>
+<link rel="alternate" type="application/atom+xml" title="Recent Entries" href="<$mt:Link template="feed_recent"$>" />
+<$mt:CCLicenseRDF$>
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="<$mt:Link template="rsd"$>" />
+</mt:ignore>
+<mt:if name="main_index">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/index.css" type="text/css" />
+</mt:if>
+<mt:if name="page_template">
+<mt:ifnonempty tag="folderlabel">
+<mt:if tag="pagebasename" eq="index">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/<$mt:folderbasename$>.css" type="text/css" />
+<mt:else>
+<link rel="stylesheet" href="<$mt:websiteurl$>css/<$mt:pagebasename$>.css" type="text/css" />
+</mt:else>
+</mt:if>
+<mt:else>
+<link rel="stylesheet" href="<$mt:websiteurl$>css/static.css" type="text/css" />
+</mt:else>
+</mt:ifnonempty>
+<mt:if tag="pagebasename" eq="inquiry">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/exvalidation.css" type="text/css" />
+</mt:if>
+</mt:if>
+<mt:if name="archive_index">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/category.css" type="text/css" />
+</mt:if>
+<mt:if name="category_archive">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/category.css" type="text/css" />
+</mt:if>
+<mt:if name="entry_template">
+<link rel="stylesheet" href="<$mt:websiteurl$>css/category.css" type="text/css" />
+<link rel="stylesheet" href="<$mt:websiteurl$>css/entry.css" type="text/css" />
+</mt:if>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript">
+window.jQuery || document.write('<script type="text/javascript" src="<$mt:websiteurl$>js/jquery-1.9.1.min.js"><\/script>');
+</script>
+<?php $agent = getenv("HTTP_USER_AGENT"); if(mb_ereg("MSIE",$agent)){ ?>
+<?php if(mb_ereg("MSIE 6.0",$agent) || mb_ereg("MSIE 7.0",$agent) || mb_ereg("MSIE 8.0",$agent)){ ?>
+<script src="<$mt:websiteurl$>js/selectivizr.js"></script>
+<?php }
+if(mb_ereg("MSIE 6.0",$agent) || mb_ereg("MSIE 7.0",$agent)){ ?>
+<script src="<$mt:websiteurl$>js/jquery.pseudo.js"></script>
+<?php } ?>
+<?php } ?>
+<script type="text/javascript" src="<$mt:websiteurl$>js/function.js"></script>
+<mt:if name="page_template">
+<mt:pageiftagged tag="form">
+<mt:unless tag="pagebasename" eq="confirmation">
+<script type="text/javascript" src="<$mt:websiteurl$>js/exvalidation.js"></script>
+<script type="text/javascript" src="<$mt:websiteurl$>js/exchecker-ja.js"></script>
+<script type="text/javascript" src="<$mt:websiteurl$>js/jquery.ah-placeholder.js"></script>
+<script type="text/javascript" src="<$mt:websiteurl$>js/jquery.cookie.js"></script>
+</mt:unless>
+<mt:if tag="pagebasename" like="(counseling|oneday)">
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script src="<$mt:websiteurl$>js/jquery.ui.datepicker-ja.js"></script>
+</mt:if>
+</mt:pageiftagged>
+</mt:if>
+</mt:blogparentwebsite>
+</head>
+<body id="<mt:if name="main_index">index</mt:if><mt:if name="archive_index">index</mt:if><mt:if name="page_template"><$mt:pagebasename$></mt:if><mt:if name="category_archive"><$mt:categorybasename$></mt:if><mt:if name="entry_template"><$mt:entrybasename$></mt:if>"<mt:ifblog> class="<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$><mt:if name="page_template"><mt:pagefolder> <$mt:folderpath regex_replace="/\//"," "$></mt:pagefolder></mt:if>"<mt:else><mt:unless name="main_index"><mt:ifnonempty tag="pagefolder"> class="<mt:parentfolders glue=" "><$mt:folderbasename regex_replace='_',''$></mt:parentfolders><mt:pageiftagged> <mt:pagetags glue=" "><$mt:taglabel$></mt:pagetags></mt:pageiftagged>"<mt:else><mt:pageiftagged> class="<mt:pagetags glue=" "><$mt:taglabel$></mt:pagetags><mt:if tag="pagebasename" eq="confirmation"><?php echo ' ',$page; ?></mt:if>"</mt:pageiftagged></mt:else></mt:ifnonempty></mt:unless></mt:else></mt:ifblog>>
+<div id="container">
+<!--container-->
+<div id="header">
+<!--header-->
+<h1><$mt:include module="h1" blog_id="$websiteid" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$></h1>
+
+<mt:unless tag="pagebasename" like="^(confirmation|mail|counseling|monitor)">
+<mt:blogparentwebsite>
+<mt:if name="main_index" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g","">
+<h2 id="logo">
+<mt:else>
+<p id="logo"><a href="<$mt:websiteurl$>">
+</mt:else>
+</mt:if>
+<img src="<$mt:websiteurl$>img/<mt:if name="main_index">index_</mt:if>logo.gif" alt="<$mt:blogname remove_html="1"$>" />
+<mt:if name="main_index">
+</h2>
+<mt:else>
+</a></p>
+</mt:else>
+</mt:if>
+</mt:blogparentwebsite>
+
+<div id="gnavi" class="nav">
+<ul>
+<mt:blogparentwebsite>
+<li class="top<mt:if name="main_index"> active<mt:else> hover</mt:else></mt:if>"><a href="<$mt:websiteurl$>"><img src="<$mt:websiteurl$>img/nav_top<mt:if name="main_index">_a</mt:if>.gif" alt="<$mt:blogname$> トップ" /></a></li>
+<mt:toplevelfolders><mt:setvarblock name="regex">^<$mt:folderlabel trim_to="1"$></mt:setvarblock>
+<li class="<$mt:folderbasename$><mt:if name="now" like="$regex"> active<mt:else> hover</mt:else></mt:if>"><a href="<$mt:websiteurl$><$mt:folderpath$>/"><img src="<$mt:websiteurl$>img/nav_<$mt:folderbasename$><mt:if name="now" like="$regex">_a</mt:if>.gif" alt="<$mt:folderlabel regex_replace="/^\d{1}/",""$>" /></a></li>
+</mt:toplevelfolders>
+</mt:blogparentwebsite>
+<mt:ifblog><$mt:setvar name="ids" value="siblings"$><mt:else><$mt:setvar name="ids" value="children"$></mt:else></mt:ifblog>
+<mt:blogs blog_ids="$ids">
+<li class="<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$><mt:if name="ids" eq="siblings"> active<mt:else> hover</mt:else></mt:if>"><a href="<$mt:blogurl$>"><img src="<mt:blogparentwebsite><$mt:websiteurl$></mt:blogparentwebsite>img/nav_<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$><mt:if name="ids" eq="siblings">_a</mt:if>.gif" alt="<$mt:blogname$>" /></a></li>
+</mt:blogs>
+</ul>
+</div>
+</mt:unless>
+<!--/header-->
+</div>

@@ -1,0 +1,173 @@
+<?php
+/*==========================================================================================
+ページャー表示用関数
+
+function pager($entrycount , $page = 1 , $dispnum = 10 , $status = "blog_latest"){
+do something..
+}
+
+$entrycount :エントリー数
+$page :開始ページ番号（初期値 : 1）
+$dispnum :1ページ表示件数（初期値 : 10）
+$status :使用ページ変数（blog_latest = スタッフブログ新着一覧（初期値） , blog_index = スタッフブログトップページ）
+
+==========================================================================================*/
+
+function pager($entrycount , $page = 1 , $dispnum = 10 , $status = "blog_latest"){//エントリー数 , 開始ページ番号 , 1ページ表示件数
+
+$total = $entrycount;
+
+if($page === NULL){
+$page = 1;
+}
+
+if($page != NULL){
+$page = $_GET['page'];
+}
+
+$pagernum = 5; //ページャー番号表示件数
+
+$first = 1; //開始ページ番号
+
+$last = ceil($total / $dispnum); //最終ページ番号
+
+$pagerfirst = $first; //ページャー開始番号
+//$pagerlast = $pagernum; //ページャー終了番号
+$pagerlast = ceil($total / $dispnum); //ページャー終了番号
+if($pagerlast == 0){
+$pagerlast = 1;
+}
+if($pagerlast > $pagernum){
+$pagerlast = $pagernum;
+}
+
+$sum = floor(($page - 1) / $pagernum); //ページャー開始番号変更用変数
+
+if($page > $pagernum){ //ページ番号がページ番号表示件数より大きい時
+$pagerfirst = $first + $pagernum * $sum; //ページャー開始番号
+$pagerlast = $pagerfirst + $pagernum - 1; //ページャー終了番号
+if($pagerlast > $last){ //ページャー終了番号が終了ページ番号より大きい時
+$pagerlast = $last; //ページャー終了番号は終了ページ番号
+}
+}
+
+if($page === NULL){
+$page = $first;
+}
+
+if($page == 1){
+$start = 0; //クエリー開始番号
+}
+else {
+$start = $dispnum * ($page - 1);
+}
+
+if($page == 1){
+$startnum = 1; //件数表示 開始番号
+}
+else {
+$startnum = ($page - 1) * $dispnum + 1;
+}
+
+if($page == 1){
+$endnum = $dispnum; //件数表示 終了番号
+}
+else {
+$endnum = $startnum - 1 + $dispnum;
+}
+
+if($endnum >= $total){
+$endnum = $total;
+}
+
+// ページャー
+echo '<div class="pager">
+<dl class="clearfix">';
+
+if($status == "blog_latest"){
+echo '<dt><span>',$total,'</span>件中 ',$startnum,' 〜 ',$endnum,' 件を表示</dt>
+<dd>
+<ol>
+';
+for($i = $first ; $i <= $last ; $i++){
+echo '<li';
+if($i == $last){echo ' class="last"';}
+echo '>';
+if($i != $page){
+echo '<a href="?page=',$i,'">';
+}
+elseif($i == $page){
+echo '<span class="now">';
+}
+echo $i;
+if($i != $page){
+echo '</a>';
+}
+elseif($i == $page){
+echo '</span>';
+}
+echo "</li>\n";
+}
+echo '</ol>
+</dd>';
+}
+
+if($status == "blog_index"){
+echo '<dt><span>',$total,'</span>件中 ',$startnum,' 〜 ',$endnum,' 件を表示</dt>
+<dd>
+<ol class="clearfix">
+';
+
+for($i = $pagerfirst ; $i <= $pagerlast ; $i++){
+
+if($i == $pagerfirst){
+if($i-$pagernum >= $first){
+echo '<li><a href="?page=',$i-$pagernum,'">&lt;&lt;</a></li>',"\n";
+}
+if($page != $first && $i != 1){
+echo '<li><a href="?page=',$i-1,'">&lt;</a></li>',"\n";
+}
+}
+
+echo '<li';
+if($i == $last){echo ' class="last"';}
+echo '>';
+if($i != $page){
+echo '<a href="?page=',$i,'">';
+}
+elseif($i == $page){
+echo '<span class="now">';
+}
+echo $i;
+if($i != $page){
+echo '</a>';
+}
+elseif($i == $page){
+echo '</span>';
+}
+echo "</li>\n";
+
+if($i == $pagerlast){
+if($last > $pagernum && $page != $last){
+if($i < $last){
+echo '<li><a href="?page=',$i+1,'">&gt;</a></li>',"\n";
+}
+if($i+$pagernum < $last){
+echo '<li><a href="?page=',$i+1+$pagernum,'">&gt;&gt;</a></li>',"\n";
+}
+}
+}
+
+}
+
+echo '</ol>
+</dd>';
+}
+
+
+echo '</dl>
+</div>';
+
+}
+
+?>

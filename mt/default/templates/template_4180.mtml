@@ -1,0 +1,42 @@
+<mt:unless tag="pagebasename" like="^(confirmation|mail|counseling|monitor)">
+<div id="footer">
+<!--footer-->
+
+<div id="fnavi" class="nav">
+<ul>
+<mt:blogparentwebsite>
+<li class="top<mt:if name="main_index"> active<mt:else> hover</mt:else></mt:if>"><a href="<$mt:websiteurl$>"><img src="<$mt:websiteurl$>img/nav_top<mt:if name="main_index">_a</mt:if>.gif" alt="<$mt:blogname$> トップ" /></a></li>
+<mt:toplevelfolders><mt:setvarblock name="regex">^<$mt:folderlabel trim_to="1"$></mt:setvarblock>
+<li class="<$mt:folderbasename$> hover"><a href="<$mt:websiteurl$><$mt:folderpath$>/"><img src="<$mt:websiteurl$>img/nav_<$mt:folderbasename$><mt:if name="now" like="$regex">_a</mt:if>.gif" alt="<$mt:folderlabel regex_replace="/^d{1}/",""$>" /></a></li>
+</mt:toplevelfolders>
+</mt:blogparentwebsite>
+<mt:ifblog><$mt:setvar name="ids" value="siblings"$><mt:else><$mt:setvar name="ids" value="children"$></mt:else></mt:ifblog>
+<mt:blogs blog_ids="$ids">
+<li class="<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$><mt:if name="ids" eq="siblings"> active<mt:else> hover</mt:else></mt:if>"><a href="<$mt:blogurl$>"><img src="<mt:blogparentwebsite><$mt:websiteurl$></mt:blogparentwebsite>img/nav_<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$><mt:if name="ids" eq="siblings">_a</mt:if>.gif" alt="<$mt:blogname$>" /></a></li>
+</mt:blogs>
+</ul>
+</div>
+<mt:blogparentwebsite>
+<p id="pagetop"><a href="#container"><img src="<$mt:websiteurl$>img/button_pagetop.gif" alt="このページの先頭へ戻る" /></a></p>
+</mt:blogparentwebsite>
+<p id="copyright">Copyright &copy; <?php echo date(Y); ?>  All Rights Reserved.</p>
+<!--/footer-->
+</div>
+</mt:unless>
+
+<!--/container-->
+</div>
+<?php
+<mt:unless tag="pagebasename" eq="confirmation">
+include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^/].*)\/$/","$1"$>/lib/asist/footer.php";
+</mt:unless>
+<mt:if tag="pagebasename" eq="confirmation">
+if($send == 1){
+include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^/].*)\/$/","$1"$>/lib/asist/mail.php";
+} else {
+include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^/].*)\/$/","$1"$>/lib/asist/footer.php";
+}
+</mt:if>
+?>
+</body>
+</html>

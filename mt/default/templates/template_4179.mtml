@@ -1,0 +1,60 @@
+<div id="topicpath">
+<ol>
+<mt:unless tag="pagebasename" eq="confirmation">
+<mt:blogparentwebsite>
+<li class="top first"><a href="<$mt:websiteurl$>"><$mt:websitename$>TOP</a></li>
+</mt:blogparentwebsite>
+<mt:ifblog>
+<mt:else>
+<mt:if name="page_template">
+<mt:if tag="pagebasename" eq="index">
+<mt:parentfolders>
+<li class="<$mt:folderbasename$> last"><$mt:folderlabel regex_replace="/^[0-9]{3}/",""$></li>
+</mt:parentfolders>
+<mt:else>
+<mt:parentfolders>
+<li class="<$mt:folderbasename$>"><a href="<$mt:websiteurl$><$mt:folderpath$>/"><$mt:folderlabel regex_replace="/^[0-9]{3}/",""$></a></li>
+</mt:parentfolders>
+<li class="<$mt:pagebasename$> last"><$mt:pagetitle$></li>
+</mt:else>
+</mt:if>
+</mt:if>
+</mt:else>
+
+<li class="<$mt:blogrelativeurl regex_replace="/.*\/([^/].*)\/$/","$1"$>"><mt:unless name="archive_index"><a href="<$mt:blogurl$>"></mt:unless><$mt:blogname$><mt:unless name="archive_index"></a></mt:unless></li>
+<mt:if name="category_archive">
+<mt:parentcategories exclude_current="1"><li class="<$mt:categorybasename$>"><a href="<$mt:categoryarchivelink$>"><$mt:categorylabel regex_replace="/^[0-9]{3}/",""$></a></li></mt:parentcategories>
+<li class="<$mt:categorybasename$>"><$mt:categorylabel regex_replace="/^[0-9]{3}/",""$></li>
+</mt:if>
+<mt:if name="entry_template">
+<li class="<$mt:entrybasename$>"><$mt:entrytitle$></li>
+</mt:if>
+<mt:if name="page_template">
+<li class="<$mt:pagebasename$>"><$mt:pagetitle$></li>
+</mt:if>
+</mt:ifblog>
+</mt:unless>
+
+<mt:if tag="pagebasename" eq="confirmation">
+<?php
+echo '<li class="',$page;
+if($page != 'oneday'){
+	echo ' last';
+}
+echo '">';
+if($page == 'mail'){
+	echo 'ドクター無料メール相談';
+} else if($page == 'counseling'){
+	echo 'カウンセリング予約';
+} else if($page == 'oneday'){
+	echo '<a href="<$mt:websiteurl$>price/">料金</a></li>',"\n";
+	echo '<li class="',$page,' last">';
+	echo '1DAY即日施術';
+} else if($page == 'monitor'){
+	echo 'モニター申し込み';
+}
+echo '</li>';
+?>
+</mt:if>
+</ol>
+</div>

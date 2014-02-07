@@ -1,0 +1,17 @@
+<mt:setvarblock name="now"><mt:ifnonempty tag="folderlabel"><$mt:folderlabel$><mt:else><$mt:pagebasename$></mt:else></mt:ifnonempty></mt:setvarblock>
+<mt:ifnonempty tag="pagefolder"><mt:setvarblock name="fname"><$mt:folderbasename$></mt:setvarblock></mt:ifnonempty>
+<mt:setvarblock name="bname"><$mt:pagebasename$></mt:setvarblock>
+<mt:ifnonempty tag="pagetags"><mt:setvarblock name="tag"><mt:pagetags glue=" "><$mt:taglabel$></mt:pagetags></mt:setvarblock></mt:ifnonempty>
+<$mt:include module="ヘッダー" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
+<div id="content">
+<!--content-->
+<$mt:include module="パンくずリスト" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
+<div id="main" class="article">
+<!--main-->
+
+<!--/main-->
+</div>
+<$mt:include module="サブコンテンツ" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
+<!--/content-->
+</div>
+<$mt:include module="フッター" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>

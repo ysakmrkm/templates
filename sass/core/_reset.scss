@@ -1,0 +1,145 @@
+@mixin reset {
+	body ,
+	h1 , h2 , h3 , h4 , h5 , h6 ,
+	div ,
+	p ,
+	ul , ol , dl ,
+	form , fieldset ,
+	table ,
+	address ,
+	blockquote ,
+	noscript ,
+	pre ,
+	tr , //ここから非ブロック要素
+	td ,
+	input ,
+	textarea {
+		margin:0;
+		padding:0;
+		line-height:1;
+		font-style:normal;
+	}
+
+	body {
+		font-size:10px;
+		//font-family:"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ","Meiryo","ＭＳ Ｐゴシック",sans-serif;
+		font-family:$font_goth;
+	}
+
+	* html body {
+		font-size:62.5%;
+	}
+
+	*+html body {
+		font-size:62.5%;
+	}
+
+	/* start \*/
+	html:\66irst-child body {
+		font-size:62.5%;
+	}
+	/* end */
+
+	body:first-of-type {
+		font-size:62.5%;
+	}
+
+	h1 , h2 , h3 , h4 , h5 , h6 {
+		font-size:1em;
+		font-weight:normal;
+	}
+
+	fieldset {
+		border:none;
+	}
+
+	table {
+		border-collapse:collapse;
+		border-spacing:0px;
+		font-size:inherit;
+		font:100%;
+	}
+
+	li {
+		list-style-type:none;
+	}
+
+	dd {
+		margin:0;
+	}
+
+	a ,
+	abbr ,
+	acronym ,
+	em ,
+	strong ,
+	span ,
+	img ,
+	sub ,
+	sup ,
+	input ,
+	button ,
+	textarea ,
+	select ,
+	label ,
+	caption {
+		font-weight:normal;
+		font-style:normal;
+	}
+
+	a {
+		text-decoration:none;
+	}
+
+	img {
+		border:none;
+		vertical-align:bottom;
+	}
+
+	caption , th {
+		font-weight:normal;
+		text-align:left;
+	}
+
+	th , td {
+		padding:0px;
+	}
+
+	input , textarea , select {
+		font-family:inherit;
+		font-size:inherit;
+	}
+
+	//以下未定義要素
+	//area
+	//base
+	//col
+	//colgroup
+	//del
+	//dt
+	//head
+	//hr
+	//iframe
+	//ins
+	//legend
+	//link
+	//map
+	//meta
+	//noscript
+	//optgroup
+	//option
+	//param
+	//tbody
+	//tfoot
+	//thead
+	//tr
+	//tt
+}
+
+@mixin reset-html5 { //HTML5
+	header , footer , article , section , aside ,
+	nav ,
+	figure , figcaption {
+		display:block;
+	}
+}

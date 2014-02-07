@@ -1,0 +1,79 @@
+--- 
+author_link: ''
+author_name: Yoshiaki Murakami
+class: website
+description: ''
+elements: 
+  blog_static_files: 
+    component: ~
+    data: 
+      - js
+    importer: blog_static_files
+  template_set: 
+    component: ~
+    data: 
+      base_path: templates
+      label: exported_template set
+      templates: 
+        index: 
+          feed_recent: 
+            build_type: 0
+            label: 最新記事のフィード
+            outfile: atom.xml
+            rebuild_me: 0
+          main_index: 
+            label: メインページ
+            outfile: index.php
+            rebuild_me: 1
+          rsd: 
+            build_type: 0
+            label: RSD
+            outfile: rsd.xml
+            rebuild_me: 0
+          template_4176: 
+            build_type: 0
+            label: NEWアイコン表示
+            outfile: func/newicon.php
+            rebuild_me: 0
+          template_4177: 
+            build_type: 0
+            label: エントリーリスト
+            outfile: func/entrylist.php
+            rebuild_me: 0
+          template_4178: 
+            build_type: 0
+            label: ページャー
+            outfile: func/pager.php
+            rebuild_me: 0
+        module: 
+          template_4179: 
+            label: パンくずリスト
+          template_4180: 
+            label: フッター
+          template_4181: 
+            label: サブコンテンツ
+          template_4182: 
+            label: ヘッダー
+          template_4183: 
+            label: title
+          template_4184: 
+            label: keyword
+          template_4185: 
+            label: description
+          template_4186: 
+            label: h1
+          template_4187: 
+            label: sitepath
+        page: 
+          page: 
+            label: ウェブページ
+            mappings: 
+              page: 
+                archive_type: Page
+                file_template: "%c/%f"
+                preferred: 1
+    importer: template_set
+id: default
+label: 新規サイト作成用テーマ
+name: 新規サイト作成用テーマ
+version: 4.5
