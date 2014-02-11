@@ -54,46 +54,18 @@ module.exports = (grunt) ->
           '**/*.html'
           '**/*.php'
         ]
-      watch:
-        file: # {{{
-          files:[
-            '**/*.html'
-            '**/*.php'
-          ]
-          #tasks:['htmllint','notify:file']
-          tasks:['notify:file']
-          options:
-            nospawn:true
-            livereload:true
-        img: # {{{
-          files:[
-            '**/img/*.gif'
-            '**/img/*.jpg'
-            '**/img/*.png'
-          ]
-          tasks:['notify:img']
-          options:
-            nospawn:true
-            livereload:true
-        sass: # {{{
-          files:[
-            '**/sass/**/*.scss'
-            '**/sass/**/*.sass'
-          ]
-          tasks:['compassMultiple:dev','styleguide','notify:sass']
-          options:
-            debounceDelay:100
-            nospawn:true
-            livereload:true
-        coffee: # {{{
-          files:[
-            '**/cs/*.coffee'
-          ]
-          tasks:['coffee','notify:coffee']
-          options:
-            debounceDelay:100
-            nospawn:true
-            livereload:true
+      esteWatch:
+        options:
+          dirs:['*']
+        'scss':
+          (filepath)->
+            console.log(filepath)
+            grunt.config(['compassMultiple','dev','options','sassFiles'],filepath.split('/')[1])
+            'compassMultiple:dev'
+        'coffee':
+          (filepath)->
+            grunt.config(['coffee','compile','src'],[filepath])
+            'coffee'
       notify:
         file:
           options:
