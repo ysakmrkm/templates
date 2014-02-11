@@ -17,24 +17,13 @@ module.exports = (grunt) ->
             cssDir:'release/css'
       coffee:
         compile:
-          files:[
-            {# {{{
-              expand:true
-              cwd:'cs/'
-              src:['**/*.coffee']
-              dest:'js/'
-              ext:'.js'
-            },# }}}
-            {# {{{
-              expand:true
-              cwd:'sp/cs/'
-              src:['**/*.coffee']
-              dest:'sp/js/'
-              ext:'.js'
-            }# }}}
-          ]
-          options:
-            bare:true
+          expand:true
+          cwd:'cs/'
+          src:['**/*.coffee']
+          dest:'js/'
+          ext:'.js'
+        options:
+          bare:true
       uglify:
         dist:
           src:'js/function.js'
