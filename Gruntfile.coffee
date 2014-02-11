@@ -25,9 +25,13 @@ module.exports = (grunt) ->
         options:
           bare:true
       uglify:
+        options:
+          sourceMap:true
         dist:
-          src:'js/function.js'
-          dest:'js/function.min.js'
+          expand:true
+          cwd:'js/'
+          src:'*.js'
+          dest:'release/js/'
       imagemin:
         dist:
           options:
