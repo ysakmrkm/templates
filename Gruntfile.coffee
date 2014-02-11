@@ -7,21 +7,14 @@ module.exports = (grunt) ->
   grunt.initConfig
       compassMultiple:
         options:
-          config:'config.rb'
-          debugInfo:true
-          time:true
-          multiple:[
-            {
-              sassDir:'sass'
-              cssDir:'css'
-            }
-          ]
+          sassDir:'sass'
+        dev:
+          options:
+            config:'config.rb'
         dist:
           options:
             environment:'production'
-          common:{}
-        dev:
-          common:{}
+            cssDir:'release/css'
       coffee:
         compile:
           files:[
