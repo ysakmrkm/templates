@@ -5,7 +5,6 @@ module.exports = (grunt) ->
   grunt.fileexpandMapping
 
   grunt.initConfig
-    #start compass multiple # {{{
       compassMultiple:
         options:
           config:'config.rb'
@@ -23,8 +22,6 @@ module.exports = (grunt) ->
           common:{}
         dev:
           common:{}
-    #end compass multiple # }}}
-    #start coffee # {{{
       coffee:
         compile:
           files:[
@@ -45,14 +42,10 @@ module.exports = (grunt) ->
           ]
           options:
             bare:true
-    #end coffee # }}}
-    #start uglify # {{{
       uglify:
         dist:
           src:'js/function.js'
           dest:'js/function.min.js'
-    #end uglify # }}}
-    #start imagemin # {{{
       imagemin:
         dist:
           options:
@@ -61,8 +54,6 @@ module.exports = (grunt) ->
             expand:true
             src:'**/*.{png,jpg,jpeg}'
           ]
-    #end imagemin # }}}
-    #start styleguide # {{{
       styleguide:
         styledocco:
           options:
@@ -71,15 +62,11 @@ module.exports = (grunt) ->
             name:'Style Guide'
           files:
             'docs':'docs/css/style.css'
-    #end styleguide # }}}
-    # start html lint # {{{
       htmllint:
         all:[
           '**/*.html'
           '**/*.php'
         ]
-    # end html lint # }}}
-    #start watch # {{{
       watch:
         file: # {{{
           files:[
@@ -91,7 +78,6 @@ module.exports = (grunt) ->
           options:
             nospawn:true
             livereload:true
-        # }}}
         img: # {{{
           files:[
             '**/img/*.gif'
@@ -102,7 +88,6 @@ module.exports = (grunt) ->
           options:
             nospawn:true
             livereload:true
-        # }}}
         sass: # {{{
           files:[
             '**/sass/**/*.scss'
@@ -113,7 +98,6 @@ module.exports = (grunt) ->
             debounceDelay:100
             nospawn:true
             livereload:true
-        # }}}
         coffee: # {{{
           files:[
             '**/cs/*.coffee'
@@ -123,37 +107,23 @@ module.exports = (grunt) ->
             debounceDelay:100
             nospawn:true
             livereload:true
-        # }}}
-    #end watch # }}}
-    #start notify # {{{
       notify:
-        file: # {{{
+        file:
           options:
             title:'Grunt Notify'
             message:'Change file'
-        # }}}
-        img: # {{{
+        img:
           options:
             title:'Grunt Notify'
             message:'Change img'
-        # }}}
-        sass: # {{{
+        sass:
           options:
             title:'Grunt Notify'
             message:'Change Sass'
-        # }}}
-        coffee: # {{{
+        coffee:
           options:
             title:'Grunt Notify'
             message:'Change Coffee Script'
-        # }}}
-    #end notify # }}}
-
-  #変更のあったファイルへのタスク適応
-  grunt.event.on('watch'
-    (action,filepath)->
-      grunt.config(['htmllint','all'],[filepath])
-  )
 
   #load plugins
   for taskName of pkg.devDependencies when taskName.substring(0, 6) is 'grunt-'
