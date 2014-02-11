@@ -38,7 +38,8 @@ module.exports = (grunt) ->
             optimizationLevel:3
           files:[
             expand:true
-            src:'**/*.{png,jpg,jpeg}'
+            src:'img/**/*.{png,jpg,jpeg}'
+            dest:'release/'
           ]
       styleguide:
         styledocco:
