@@ -89,5 +89,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks taskName
 
   #define 'default' task
-  grunt.registerTask 'default',['watch']
+  grunt.registerTask 'default',['esteWatch']
   grunt.registerTask 'release',['compassMultiple:dist','uglify','imagemin']
