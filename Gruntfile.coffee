@@ -63,7 +63,7 @@ module.exports = (grunt) ->
           tasks:['coffee','notify:coffee']
       esteWatch:
         options:
-          dirs:['*/','!node_modules/']
+          dirs:['*/','!node_modules/','*/**/','!node_modules/**/']
         'scss':
           (filepath)->
             console.log(filepath)
