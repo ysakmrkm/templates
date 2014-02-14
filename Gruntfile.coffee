@@ -54,9 +54,16 @@ module.exports = (grunt) ->
           '**/*.html'
           '**/*.php'
         ]
+      watch:
+        sass:
+          files:'sass/**/*.scss'
+          tasks:['compassMultiple:dev','notify:sass']
+        coffee:
+          files:'cs/**/*.coffee'
+          tasks:['coffee','notify:coffee']
       esteWatch:
         options:
-          dirs:['*']
+          dirs:['*/','!node_modules/']
         'scss':
           (filepath)->
             console.log(filepath)
@@ -89,5 +96,6 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks taskName
 
   #define 'default' task
-  grunt.registerTask 'default',['esteWatch']
+  #grunt.registerTask 'default',['esteWatch']
+  grunt.registerTask 'default',['watch']
   grunt.registerTask 'release',['compassMultiple:dist','uglify','imagemin']
