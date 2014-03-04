@@ -61,6 +61,9 @@ module.exports = (grunt) ->
         coffee:
           files:'cs/**/*.coffee'
           tasks:['coffee','notify:coffee']
+        php:
+          files:'**/*.php'
+          tasks:['notify:file']
       esteWatch:
         options:
           dirs:['*/','!node_modules/','*/**/','!node_modules/**/']
