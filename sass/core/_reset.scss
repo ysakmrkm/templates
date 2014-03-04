@@ -136,10 +136,12 @@
 	//tt
 }
 
-@mixin reset-html5 { //HTML5
+@mixin resethtml5 { //HTML5
 	header , footer , article , section , aside ,
 	nav ,
 	figure , figcaption {
 		display:block;
+		margin:0;
+		padding:0;
 	}
 }
