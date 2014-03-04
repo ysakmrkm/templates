@@ -32,7 +32,7 @@ module.exports = (grunt) ->
           cwd:'js/'
           src:'*.js'
           dest:'release/js/'
-      imagemin:
+      image:
         dist:
           options:
             optimizationLevel:3
@@ -101,4 +101,4 @@ module.exports = (grunt) ->
   #define 'default' task
   #grunt.registerTask 'default',['esteWatch']
   grunt.registerTask 'default',['watch']
-  grunt.registerTask 'release',['compassMultiple:dist','uglify','imagemin']
+  grunt.registerTask 'release',['compassMultiple:dist','uglify','image']
