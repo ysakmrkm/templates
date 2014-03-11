@@ -8,7 +8,7 @@
 <$mt:include module="パンくずリスト" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
 <article id="main">
 <!--main-->
-<$mt:pagebody trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
+<$mt:pagebody mteval="1" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
 <!--/main-->
 </article>
 <$mt:include module="サブコンテンツ" trim_ex="ltrim,rtrim,trimcr" regex_replace="/\n+$/g",""$>
