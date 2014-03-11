@@ -38,8 +38,8 @@ module.exports = (grunt) ->
             optimizationLevel:3
           files:[
             expand:true
-            src:'img/**/*.{png,jpg,jpeg}'
-            dest:'release/'
+            src:'img/**/*.{png,gif,jpg,jpeg}'
+            dest:'release/img/'
           ]
       styleguide:
         styledocco:
@@ -54,16 +54,6 @@ module.exports = (grunt) ->
           '**/*.html'
           '**/*.php'
         ]
-      watch:
-        sass:
-          files:'sass/**/*.scss'
-          tasks:['compassMultiple:dev','notify:sass']
-        coffee:
-          files:'cs/**/*.coffee'
-          tasks:['coffee','notify:coffee']
-        php:
-          files:'**/*.php'
-          tasks:['notify:file']
       esteWatch:
         options:
           dirs:['*/','!node_modules/','*/**/','!node_modules/**/']
@@ -99,6 +89,5 @@ module.exports = (grunt) ->
     grunt.loadNpmTasks taskName
 
   #define 'default' task
-  #grunt.registerTask 'default',['esteWatch']
-  grunt.registerTask 'default',['watch']
+  grunt.registerTask 'default',['esteWatch']
   grunt.registerTask 'release',['compassMultiple:dist','uglify','image']
