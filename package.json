@@ -9,6 +9,6 @@
     "grunt-styleguide": "~0.2.15",
     "grunt-html": "~0.3.4",
     "grunt-este-watch": "~0.1.15",
-    "grunt-image": "^0.4.10"
+    "grunt-image": "^0.4.11"
   }
 }
