@@ -6,6 +6,10 @@
 	}
 }
 
+@function padding($margin,$lheight,$base,$unit:0){
+	@return margin($margin,$lheight,$base,$unit);
+}
+
 @function pxtoem($target,$base){
 	@return ($target / $base)+em;
 }
