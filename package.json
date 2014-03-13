@@ -8,7 +8,7 @@
     "grunt-compass-multiple": "~0.2.1",
     "grunt-styleguide": "~0.2.15",
     "grunt-html": "~0.3.4",
-    "grunt-este-watch": "~0.1.15",
+    "grunt-este-watch": "^0.1.15",
     "grunt-image": "^0.4.11"
   }
 }
