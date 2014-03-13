@@ -112,3 +112,17 @@
 		}
 	}
 }
+
+@mixin table-cell {
+	display:table-cell;
+
+	* html & {
+		display:inline;
+		zoom:1;
+	}
+
+	*+html & {
+		display:inline;
+		zoom:1;
+	}
+}
