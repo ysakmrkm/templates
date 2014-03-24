@@ -24,13 +24,11 @@ module.exports = (grunt) ->
             'cs/index.coffee':['cs/base.coffee','cs/index.coffee']
       coffee:
         dev:
-          #expand:true
-          #cwd:'cs/'
-          #src:['**/*.coffee']
-          #dest:'js/'
-          #ext:'.js'
-          files:
-            'js/index.js':['cs/base.coffee','cs/index.coffee']
+          expand:true
+          cwd:'cs/'
+          src:['**/*.coffee']
+          dest:'js/'
+          ext:'.js'
           options:
             bare:true
             sourceMap:true
