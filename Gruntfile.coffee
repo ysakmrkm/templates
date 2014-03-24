@@ -136,4 +136,4 @@ module.exports = (grunt) ->
 
   #define 'default' task
   grunt.registerTask 'default',['esteWatch']
-  grunt.registerTask 'release',['compassMultiple:dist','uglify','image']
+  grunt.registerTask 'release',['copy','compassMultiple:dist','coffee:dist','uglify','image']
