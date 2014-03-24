@@ -21,7 +21,7 @@ module.exports = (grunt) ->
       concat:
         dist:
           files:
-            '<%= dir.releaseDir %>/cs/index.coffee':['cs/base.coffee','cs/index.coffee']
+            'cs/index.coffee':['cs/base.coffee','cs/index.coffee']
       coffee:
         dev:
           #expand:true
