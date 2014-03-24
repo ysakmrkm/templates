@@ -111,7 +111,7 @@ module.exports = (grunt) ->
         'coffee':
           (filepath)->
             grunt.config(['coffee','compile','src'],[filepath])
-            'coffee'
+            'concat','coffee:dev'
       notify:
         file:
           options:
