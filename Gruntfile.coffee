@@ -93,12 +93,12 @@ module.exports = (grunt) ->
             expand:true
             src:'sass/**'
             dest:'<%= dir.releaseDir %>/'
-          #,
-          #  expand:true
-          #  flatten:true
-          #  src:'cs/*'
-          #  dest:'release/cs/'
-          #  filter:'isFile'
+          ,
+            expand:true
+            flatten:true
+            src:'cs/*'
+            dest:'release/cs/'
+            filter:'isFile'
           ]
       esteWatch:
         options:
