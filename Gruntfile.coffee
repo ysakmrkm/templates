@@ -49,6 +49,9 @@ module.exports = (grunt) ->
           sourceMapIn:
             (e)->
               return e+'.map'
+          sourceMapName:
+            (e)->
+              return e+'.map'
         files:
           expand:true
           cwd:'<%= dir.releaseDir %>/js'
