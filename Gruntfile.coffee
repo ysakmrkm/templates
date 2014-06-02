@@ -107,6 +107,8 @@ module.exports = (grunt) ->
             dest:'<%= dir.releaseDir %>/cs/'
             filter:'isFile'
           ]
+      clean:
+        dist:['<%= dir.releaseDir %>/sass/','<%= dir.releaseDir %>/cs/']
       esteWatch:
         options:
           dirs:['*/','!node_modules/','*/**/','!node_modules/**/']
@@ -143,4 +145,4 @@ module.exports = (grunt) ->
 
   #define 'default' task
   grunt.registerTask 'default',['esteWatch']
-  grunt.registerTask 'release',['copy','compassMultiple:dist','coffee:dist','uglify','image']
+  grunt.registerTask 'release',['copy','compassMultiple:dist','coffee:dist','uglify','clean','image']
