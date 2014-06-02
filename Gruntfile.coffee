@@ -44,6 +44,8 @@ module.exports = (grunt) ->
             sourceMap:true
       uglify:
         options:
+          compress:
+            drop_console:true
           expand:true
           sourceMap:true
           sourceMapIncludeSources:true
