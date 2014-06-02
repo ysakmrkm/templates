@@ -18,6 +18,7 @@ module.exports = (grunt) ->
             environment:'production'
             sassDir:'<%= dir.releaseDir %>/sass'
             cssDir:'<%= dir.releaseDir %>/css'
+            imagesDir:'<%= dir.releaseDir %>/img'
       concat:
         dist:
           files:
