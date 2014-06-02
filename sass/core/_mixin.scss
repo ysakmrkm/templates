@@ -19,6 +19,12 @@
 	}
 }
 
+@mixin text-replacement {
+	text-indent:100%;
+	white-space:nowrap;
+	overflow:hidden;
+}
+
 @mixin background($path:'',$pos1:'',$pos2:'',$repeat:'',$color:''){
 	@if $path != '' {
 		$path:url(#{$path});
