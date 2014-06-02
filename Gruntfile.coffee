@@ -88,7 +88,7 @@ module.exports = (grunt) ->
           relaxerror:
             "Saw <?. Probable cause: Attempt to use an XML processing instruction in HTML. (XML processing instructions are not supported in HTML.)"
         target:[
-          '*.php'
+          '**/*.php'
         ]
       copy:
         dist:
