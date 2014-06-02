@@ -41,7 +41,16 @@ on_sprite_generated do |filename|
   g = Growl.new "localhost", "ruby-growl"
   g.add_notification "ruby-growl Notification"
   g.notify "ruby-growl Notification", "It came from ruby-growl!",
-           "#{File.basename(filename)} updated!", -2
+           "sprite image generated!", -2
+end
+
+#スプライト画像の後ろに付くランダム文字列を除去
+# Make a copy of sprites with a name that has no uniqueness of the hash.
+on_sprite_saved do |filename|
+  if File.exists?(filename)
+    FileUtils.cp filename, filename.gsub(%r{-s[a-z0-9]{10}\.png$}, '.png')
+    FileUtils.rm_rf(filename)
+  end
 end
 
 # CSSファイル保存時
@@ -50,6 +59,14 @@ on_stylesheet_saved do |filename|
   g.add_notification "ruby-growl Notification"
   g.notify "ruby-growl Notification", "It came from ruby-growl!",
            "#{File.basename(filename)} updated!", -1
+
+  # CSSファイル内 スプライト画像後ろのランダム文字列削除
+  if File.exists?(filename)
+    css = File.read filename
+    File.open(filename, 'w+') do |f|
+      f << css.gsub(%r{-s[a-z0-9]{10}\.png}, '.png')
+    end
+  end
 end
 
 # CSSファイルエラー発生時
@@ -58,24 +75,4 @@ on_stylesheet_error do |filename, message|
   g.add_notification "ruby-growl Notification"
   g.notify "ruby-growl Notification", "It came from ruby-growl!",
            "#{File.basename(filename)}: #{message}", 2
-end
-
-#スプライト画像の後ろに付くランダム文字列を除去
-# Make a copy of sprites with a name that has no uniqueness of the hash.
-on_sprite_saved do |filename|
-  if File.exists?(filename)
-    FileUtils.cp filename, filename.gsub(%r{-s[a-z0-9]{10}\.png$}, '.png')
-  end
-end
-
-# CSSファイル内 スプライト画像後ろのランダム文字列削除
-# Replace in stylesheets generated references to sprites
-# by their counterparts without the hash uniqueness.
-on_stylesheet_saved do |filename|
-  if File.exists?(filename)
-    css = File.read filename
-    File.open(filename, 'w+') do |f|
-      f << css.gsub(%r{-s[a-z0-9]{10}\.png}, '.png')
-    end
-  end
 end
