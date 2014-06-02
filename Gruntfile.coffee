@@ -94,6 +94,10 @@ module.exports = (grunt) ->
         dist:
           files:[
             expand:true
+            src:'img/**'
+            dest:'<%= dir.releaseDir %>/'
+          ,
+            expand:true
             src:'sass/**'
             dest:'<%= dir.releaseDir %>/'
           ,
