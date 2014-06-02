@@ -104,7 +104,7 @@ module.exports = (grunt) ->
             expand:true
             flatten:true
             src:'cs/*'
-            dest:'release/cs/'
+            dest:'<%= dir.releaseDir %>/cs/'
             filter:'isFile'
           ]
       esteWatch:
