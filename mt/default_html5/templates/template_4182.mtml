@@ -1,7 +1,7 @@
 <mt:blogparentwebsite><$mt:websiteid setvar="websiteid"$></mt:blogparentwebsite>
 <?php
-include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^\/]+)\/?$/","$1"$>/lib/constants.php";
-include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1"regex_replace="/(.*)\/([^\/]+)\/?$/","$1"$>/lib/mail/mail.php";
+include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/constants.php";
+include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/mail/mail.php";
 ?>
 <!DOCTYPE html>
 <html lang="ja">

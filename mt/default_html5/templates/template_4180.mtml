@@ -28,13 +28,13 @@
 </div>
 <?php
 <mt:unless tag="pagebasename" eq="confirmation">
-include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^\/]+)\/?$/","$1"$>/lib/asist/footer.php";
+include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/asist/footer.php";
 </mt:unless>
 <mt:if tag="pagebasename" eq="confirmation">
 if($send == 1){
-include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^\/]+)\/?$/","$1"$>/lib/asist/mail.php";
+include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/asist/mail.php";
 } else {
-include_once "<$mt:include module="sitepath" blog_id="$websiteid" strip_linefeeds="1" regex_replace="/(.*)\/([^\/]+)\/?$/","$1"$>/lib/asist/footer.php";
+include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/asist/footer.php";
 }
 </mt:if>
 ?>
