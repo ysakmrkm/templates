@@ -23,9 +23,59 @@
 <!--/footer-->
 </footer>
 </mt:unless>
-
 <!--/container-->
 </div>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+if(!window.jQuery){
+var sNew = document.createElement("script");
+sNew.async = true;
+sNew.src = "<$mt:websiteurl$>js/jquery-1.9.1.min.js";
+var s0 = document.getElementsByTagName('script')[0];
+s0.parentNode.insertBefore(sNew, s0);
+}
+</script>
+<?php $agent = getenv("HTTP_USER_AGENT"); if(mb_ereg("MSIE",$agent)){ ?>
+<?php if(mb_ereg("MSIE 6.0",$agent) || mb_ereg("MSIE 7.0",$agent) || mb_ereg("MSIE 8.0",$agent)){ ?>
+<script src="<$mt:websiteurl$>js/PIE_IE678.js"></script>
+<script src="<$mt:websiteurl$>js/html5shiv.js"></script>
+<script src="<$mt:websiteurl$>js/selectivizr.js"></script>
+<?php }
+if(mb_ereg("MSIE 6.0",$agent) || mb_ereg("MSIE 7.0",$agent)){ ?>
+<script src="<$mt:websiteurl$>js/jquery.pseudo.js"></script>
+<?php } 
+if(mb_ereg("MSIE 9.0",$agent)){ ?>
+<script src="<$mt:websiteurl$>js/PIE_IE9.js"></script>
+<?php }
+} ?>
+<mt:if name="main_index">
+<script src="<$mt:websiteurl$>js/index.js"></script>
+</mt:if>
+<mt:if name="page_template">
+<mt:pageiftagged tag="form">
+<mt:unless tag="pagebasename" eq="confirmation">
+<script src="<$mt:websiteurl$>js/exvalidation.js"></script>
+<script src="<$mt:websiteurl$>js/exchecker-ja.js"></script>
+<script src="<$mt:websiteurl$>js/jquery.ah-placeholder.js"></script>
+<script src="<$mt:websiteurl$>js/jquery.cookie.js"></script>
+</mt:unless>
+<mt:if tag="pagebasename" like="(counseling|oneday)">
+<script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
+<script src="<$mt:websiteurl$>js/jquery.ui.datepicker-ja.js"></script>
+</mt:if>
+</mt:pageiftagged>
+<mt:ifnonempty tag="folderlabel">
+<mt:if tag="pagebasename" eq="index">
+<script src="<$mt:websiteurl$>js/<$mt:folderbasename$>.js"></script>
+<mt:else>
+<script src="<$mt:websiteurl$>js/<$mt:pagebasename$>.js"></script>
+</mt:else>
+</mt:if>
+<mt:else>
+<script src="<$mt:websiteurl$>js/static.js"></script>
+</mt:else>
+</mt:ifnonempty>
+</mt:if>
 <?php
 <mt:unless tag="pagebasename" eq="confirmation">
 include_once preg_replace('/^(.*(Sites|htdocs)).*$/','$1',$_SERVER['DOCUMENT_ROOT'])."/lib/asist/footer.php";
