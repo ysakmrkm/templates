@@ -20,14 +20,14 @@ module.exports = (grunt) ->
             cssDir:'<%= dir.releaseDir %>/css'
             imagesDir:'<%= dir.releaseDir %>/img'
       concat:
-        dist:
+        dev:
           files:
-            'cs/index.coffee':['cs/base.coffee','cs/index.coffee']
+            'cs/index.coffee':['cs/core/common.coffee','cs/pages/index.coffee']
       coffee:
         dev:
           expand:true
           cwd:'cs/'
-          src:['**/*.coffee']
+          src:['*.coffee']
           dest:'js/'
           ext:'.js'
           options:
@@ -111,16 +111,43 @@ module.exports = (grunt) ->
         dist:['<%= dir.releaseDir %>/sass/','<%= dir.releaseDir %>/cs/']
       esteWatch:
         options:
-          dirs:['*/','!node_modules/','*/**/','!node_modules/**/']
-        'scss':
+          dirs:['./','*/','!node_modules/','*/**/','!node_modules/**/']
+        scss:
           (filepath)->
-            console.log(filepath)
-            grunt.config(['compassMultiple','dev','options','sassFiles'],filepath.split('/')[1])
-            'compassMultiple:dev'
-        'coffee':
+            ['compassMultiple:dev','notify:sass']
+        coffee:
           (filepath)->
-            grunt.config(['coffee','compile','src'],[filepath])
-            'concat','coffee:dev'
+            target = filepath.split('/').reverse()[0]
+            for key of grunt.config(['concat','dev','files'])
+              if key.indexOf(target) isnt -1 and key isnt filepath
+                concat = {}
+                concat[key] = grunt.config(['concat','dev','files'])[key]
+
+                grunt.config(['notify','coffee','options','message'],'Change '+filepath)
+                grunt.config(['coffee','dev','src'],[target])
+
+                if Object.keys(concat).length isnt 0
+                  grunt.config(['concat','now','files'],concat)
+                  ['concat:dev','coffee:dev','notify:coffee']
+
+            if grunt.config(['concat','now','files'],concat) isnt undefined
+              ['concat:now','coffee:dev','notify:coffee']
+        php:
+          (filepath)->
+            grunt.config(['notify','file','options','message'],'Change '+filepath)
+            'notify:file'
+        gif:
+          (filepath)->
+            grunt.config(['notify','img','options','message'],'Change '+filepath.split('/').reverse()[0])
+            'notify:img'
+        jpg:
+          (filepath)->
+            grunt.config(['notify','img','options','message'],'Change '+filepath.split('/').reverse()[0])
+            'notify:img'
+        png:
+          (filepath)->
+            grunt.config(['notify','img','options','message'],'Change '+filepath.split('/').reverse()[0])
+            'notify:img'
       notify:
         file:
           options:
