@@ -111,7 +111,10 @@ module.exports = (grunt) ->
         dist:['<%= dir.releaseDir %>/sass/','<%= dir.releaseDir %>/cs/']
       esteWatch:
         options:
-          dirs:['./','*/','!node_modules/','*/**/','!node_modules/**/']
+          dirs:['./','*/','!{node_modules,<%= dir.releaseDir %>}/','*/**/','!{node_modules,<%= dir.releaseDir %>}/**/']
+          livereload:
+            enabled: true
+            extensions:['html', 'php', 'css', 'js', 'gif', 'jpg', 'png']
         scss:
           (filepath)->
             ['compassMultiple:dev','notify:sass']
