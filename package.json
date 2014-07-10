@@ -9,10 +9,8 @@
     "grunt-contrib-copy": "^0.5.0",
     "grunt-contrib-uglify": "^0.5.0",
     "grunt-este-watch": "^0.1.16",
-    "grunt-html-validation": "^0.1.18",
     "grunt-image": "^0.7.1",
     "grunt-notify": "^0.3.0",
-    "grunt-sass-format": "0.0.6",
-    "grunt-styleguide": "^0.2.15"
+    "grunt-sass-format": "0.0.6"
   }
 }
