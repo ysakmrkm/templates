@@ -131,10 +131,11 @@ module.exports = (grunt) ->
 
                 if Object.keys(concat).length isnt 0
                   grunt.config(['concat','now','files'],concat)
-                  ['concat:dev','coffee:dev','notify:coffee']
 
             if grunt.config(['concat','now','files'],concat) isnt undefined
               ['concat:now','coffee:dev','notify:coffee']
+            else
+              ['concat:dev','coffee:dev','notify:coffee']
         php:
           (filepath)->
             grunt.config(['notify','file','options','message'],'Change '+filepath)
