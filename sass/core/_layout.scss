@@ -11,6 +11,31 @@
 	body {
 		-webkit-text-size-adjust:100%;
 	}
+
+	a {
+		& ,
+		&:before ,
+		&:after {
+			@include transition(background-color $mouseover linear,background-image $mouseover linear);
+		}
+
+		> * {
+			@include transition(opacity $mouseover linear);
+		}
+
+		img {
+			background:#fff;
+		}
+
+		&:hover {
+			text-decoration:underline;
+
+			> * {
+				@include opacity(0);
+				text-decoration:none;
+			}
+		}
+	}
 }
 
 @mixin layout-container {
