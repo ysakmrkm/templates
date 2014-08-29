@@ -81,22 +81,23 @@ $ ->
   $class = $('body').attr('class')
 
   #フッター高さ取得# {{{
-  footerHeight = ->
-    add = 0
-    height = $('#footer').outerHeight()
-    $('#content').css('padding-bottom',height+add)
-    $('#footer').css('height',height)
-    return
-
-  $(window).load(
-    ->
-      setInterval(
-        ->
-          footerHeight()
-          return
-        ,100
-      )
+  footerHeight =
+    ()->
+      add = 0
+      height = $('#footer').height()
+      outerHeight = $('#footer').outerHeight(true)
+      diff = height - outerHeight
+      if diff > 0
+        $('#content').css('padding-bottom',height+add)
+        $('#footer').css('height',height)
+      else
+        $('#content').css('padding-bottom',outerHeight+add)
+        $('#footer').css('height',height)
       return
+
+  $(window).on('load resize',
+    ->
+      footerHeight()
   )
   # }}}
 
