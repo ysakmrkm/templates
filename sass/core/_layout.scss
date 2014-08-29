@@ -5,7 +5,7 @@
 	}
 
 	html {
-		-pie-load-path:"http://any.server/path/to/pie-js-files/PIE.htc";
+		//-pie-load-path:"http://any.server/path/to/pie-js-files/PIE.htc";
 	}
 
 	body {
@@ -55,9 +55,9 @@
 
 @mixin common {
 	//placeholderでやる必要性を検討
-	%pie {
-		@include pie-element(relative);
-	}
+	//%pie {
+	//	@include pie-element(relative);
+	//}
 }
 
 @mixin layout-header {
