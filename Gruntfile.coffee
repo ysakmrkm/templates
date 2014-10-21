@@ -70,26 +70,6 @@ module.exports = (grunt) ->
             src:'img/**/*.{png,gif,jpg,jpeg}'
             dest:'<%= dir.releaseDir %>/'
           ]
-      styleguide:
-        styledocco:
-          options:
-            framework:
-              name:'styledocco'
-            name:'Style Guide'
-          files:
-            'docs':'docs/css/style.css'
-      htmllint:
-        all:[
-          '**/*.html'
-          '**/*.php'
-        ]
-      validation:
-        options:
-          relaxerror:
-            "Saw <?. Probable cause: Attempt to use an XML processing instruction in HTML. (XML processing instructions are not supported in HTML.)"
-        target:[
-          '**/*.php'
-        ]
       copy:
         dist:
           files:[
