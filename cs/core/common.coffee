@@ -50,6 +50,10 @@ url = do ->
   else if workRegex.test(location.href) is true
     length = 3
 
+    for val , i in href
+      if val is 'pc' and href[i-1] is 'work'
+        length = 4
+
   else
     length = 1
 
