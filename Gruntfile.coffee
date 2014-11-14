@@ -7,6 +7,21 @@ module.exports = (grunt) ->
   grunt.initConfig
       dir:
         releaseDir:'release'
+      jade:
+        dev:
+          options:
+            pretty:true
+            filters:require './jade/filters.js'
+            data:
+              ->
+                require './jade/data.json'
+          files:[
+            expand: true
+            cwd: 'jade/'
+            src: ['**/*.jade','!**/{_*,mixin}.jade']
+            dest: 'views/'
+            ext: '.php'
+          ]
       compassMultiple:
         options:
           sassDir:'sass'
@@ -101,6 +116,9 @@ module.exports = (grunt) ->
           livereload:
             enabled: true
             extensions:['html', 'php', 'css', 'js', 'gif', 'jpg', 'png']
+        jade:
+          (filepath)->
+            ['jade:dev','notify:file']
         scss:
           (filepath)->
             ['compassMultiple:dev','compass-sprite-rename:dev','notify:sass']

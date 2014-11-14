@@ -1,0 +1,29 @@
+{
+	"page":["index","consultation","bodycounseling","counseling","confirmation"],
+	"bodyId":{
+		"index":"index",
+		"form":{
+			"confirmation":"confirmation"
+		}
+	},
+	"bodyClass":{
+		"index":"home",
+		"form":{
+			"confirmation":"form"
+		}
+	},
+	"meta":{
+		"title":{
+			"index":"index title"
+		},
+		"keywords":{
+			"index":"index,keywords"
+		},
+		"description":{
+			"index":"index description"
+		},
+		"h1":{
+			"index":"index h1"
+		}
+	}
+}

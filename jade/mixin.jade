@@ -1,0 +1,93 @@
+mixin title(page,category)
+  each val, index in meta.title
+    if index == category
+      case typeof val
+        when 'object'
+          each val2, index2 in val
+            if index2 == page
+              - var title = val2
+              title #{title}
+        when 'string' 
+          - var title = val
+          title #{title}
+    else
+      if index == page
+        - var title = val
+        title #{title}
+
+mixin meta(tag,page,category)
+  each val, index in meta
+    if index == tag
+      each val2, index2 in val
+        if index2 == category
+          case typeof val2
+            when 'object'
+              each val3, index3 in val2
+                if index3 == page
+                  - var content = val3
+                  meta(name="#{tag}" content="#{content}")
+            when 'string' 
+              - var content = val2
+              meta(name="#{tag}" content="#{content}")
+        else
+          if index2 == page
+            - var content = val2
+            meta(name="#{tag}" content="#{content}")
+
+mixin body(page,category)
+  - var Id = ""
+  - var Class = ""
+  - var hasId = true
+  - var hasClass = true
+  - var isForm = false
+
+  if category === "form"
+    - isForm = true
+
+  each val, index in bodyId
+    if index == category
+      case typeof val
+        when 'string' 
+          - Id = val
+        when 'object' 
+          each val2, index2 in val
+            if index2 === page
+              - Id = val2
+            else
+              - hasId = false
+          if Id !== ""
+            - hasId = true
+  each val, index in bodyClass
+    if index == category
+      case typeof val
+        when 'string' 
+          - Class = val
+        when 'object' 
+          each val2, index2 in val
+            if index2 === page
+              - Class = val2
+            else
+              - hasClass = false
+          if Class !== ""
+            - hasClass = true
+          if hasClass === false && Class === ""
+            - Class = category
+
+  if isForm  === true
+    if hasId  === false
+      body(id!="<?php echo $page; ?>" class!="#{Class}")
+        block
+    else
+      body(id!="#{Id}" class!="#{Class}<?php echo ' ',$page,' ',$condition; ?>")
+        block
+  else
+    if hasId  === false
+      if hasClass  === false
+          body(id!="<?php echo $page; ?>")
+            block
+      else
+        body(id!="<?php echo $page; ?>" class!="#{Class}")
+          block
+    else
+        body(id="#{Id}" class="#{Class}")
+          block
