@@ -19,6 +19,12 @@ module.exports = (grunt) ->
             sassDir:'<%= dir.releaseDir %>/sass'
             cssDir:'<%= dir.releaseDir %>/css'
             imagesDir:'<%= dir.releaseDir %>/img'
+      'compass-sprite-rename':
+        dev:
+          options:
+            cssDir:'css'
+            imageDir:'img'
+            generatedImagesDir:'img'
       concat:
         dev:
           files:
@@ -97,7 +103,7 @@ module.exports = (grunt) ->
             extensions:['html', 'php', 'css', 'js', 'gif', 'jpg', 'png']
         scss:
           (filepath)->
-            ['compassMultiple:dev','notify:sass']
+            ['compassMultiple:dev','compass-sprite-rename:dev','notify:sass']
         coffee:
           (filepath)->
             target = filepath.split('/').reverse()[0]
