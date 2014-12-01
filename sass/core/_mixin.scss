@@ -133,3 +133,31 @@
 		zoom:1;
 	}
 }
+
+@mixin pattern-check($color1:'#fff', $color2:'#000', $target:'.item-inner', $col:$num) {
+	#{$target} {
+		background-color:#{$color2};
+	}
+
+	@if $col % 2 == 0 {
+		@for $i from 0 through floor(($col - 1) / 2) {
+			&:nth-child(#{$col * 2}n + #{($i * 2) + 1}) ,
+			&:nth-child(#{$col * 2}n + #{($i * 2) + $col + 2}) {
+				#{$target} {
+					background-color:#{$color1};
+				}
+			}
+		}
+	} @else {
+		@for $i from 0 through floor(($col - 1) / 2) {
+			@for $j from 0 through floor($col / 2) {
+				&:nth-child(#{$col * 2}n + #{($col + 1) * $i + ($j * 2) + 1}) {
+					#{$target} {
+						background-color:#{$color1};
+					}
+				}
+			}
+		}
+	}
+}
+
