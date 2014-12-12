@@ -105,7 +105,7 @@ $ ->
   )
   # }}}
 
-  $('a[href^=#]').click(
+  $('a[href^=#]'+'a[href!=#]').click(
     (e)->
       $(
         if (navigator.userAgent.indexOf('Opera') isnt -1)
