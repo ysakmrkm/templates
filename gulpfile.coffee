@@ -21,7 +21,10 @@ gulp.task 'compass',() ->
   gulp.src basePath+'sass/**/*.scss'
     .pipe cache('compass')
     .pipe debug(title: 'start compass:')
-    .pipe plumber()
+    .pipe plumber(
+      errorHandler: (error)->
+        this.emit('end');
+    )
     .pipe compass(
       config_file : 'config.rb'
       comments : false
