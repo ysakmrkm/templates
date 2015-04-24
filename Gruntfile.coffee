@@ -4,6 +4,9 @@ module.exports = (grunt) ->
 
   grunt.fileexpandMapping
 
+  target = if grunt.option('target')? then grunt.option('target') else ''
+  targetPath = if target isnt '' then target+'/' else target
+
   grunt.initConfig
       dir:
         releaseDir:'release'
@@ -11,15 +14,15 @@ module.exports = (grunt) ->
         dev:
           options:
             pretty:true
-            filters:require './jade/filters.js'
+            filters:require './'+targetPath+'jade/filters.js'
             data:
               ->
-                require './jade/data.json'
+                require './'+targetPath+'jade/data.json'
           files:[
             expand: true
-            cwd: 'jade/'
+            cwd: targetPath+'jade/'
             src: ['**/*.jade','!**/{_*,mixin}.jade']
-            dest: 'views/'
+            dest: 'views/'+targetPath
             ext: '.php'
           ]
       compassMultiple:
