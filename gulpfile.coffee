@@ -8,6 +8,11 @@ plumber = require('gulp-plumber')
 debug = require('gulp-debug')
 cache = require('gulp-cached')
 remember = require('gulp-remember')
+watch = require('gulp-watch')
+jade = require('gulp-jade')
+jadeRef = require('gulp-jade/node_modules/jade')
+rename = require('gulp-rename')
+del = require('del')
 
 basePath = ''
 
@@ -17,16 +22,38 @@ gulp.task 'webserver',() ->
       livereload: true
     )
 
+jadeRef.filters.php = (block) ->
+  return "<?php\n"+block+"\n?>"
+
+gulp.task 'jade',() ->
+  gulp.src [basePath+'jade/**/*.jade', '!'+basePath+'jade/**/_*.jade']
+    #.pipe cache('jade')
+    .pipe debug(title: 'start jade:')
+    .pipe plumber(
+      errorHandler: (error)->
+        this.emit('end');
+    )
+    .pipe jade(
+      pretty: true
+    )
+    .pipe rename(
+      extname: '.php'
+    )
+    .pipe gulp.dest(basePath+'views/pc/')
+    .pipe debug(title: 'end jade:')
+    #.pipe remember('jade')
+
 gulp.task 'compass',() ->
   gulp.src basePath+'sass/**/*.scss'
     .pipe cache('compass')
     .pipe debug(title: 'start compass:')
     .pipe plumber(
       errorHandler: (error)->
-        this.emit('end');
+        console.log error
+        this.emit('end')
     )
     .pipe compass(
-      config_file : 'config.rb'
+      config_file : './config.rb'
       comments : false
       css : basePath+'css'
       sass: basePath+'sass'
@@ -34,6 +61,9 @@ gulp.task 'compass',() ->
     .pipe gulp.dest(basePath+'css/')
     .pipe debug(title: 'end compass:')
     .pipe remember('compass')
+
+gulp.task 'sprite', ['compass'],() ->
+  del basePath+'img/*-s+([a-z0-9]).png'
 
 csFiles = [
   ['cs/core/common.coffee' , 'cs/pages/index.coffee']
@@ -57,19 +87,20 @@ doConcat = (path) ->
     console.log src
 
     gulp.src src
+      .pipe debug(title: 'start concat:')
       .pipe concat(target)
       .pipe gulp.dest('cs/')
-      .pipe debug()
-
-gulp.task 'concat', () ->
-    #gulp.src 'cs/**/*.coffee'
-    #  .pipe changed(basePath+'js/')
+      .pipe debug(title: 'end concat:')
 
 gulp.task 'coffee', () ->
   gulp.src [basePath+'cs/*.coffee']
     .pipe cache('coffee')
     .pipe debug(title: 'start coffee:')
-    .pipe plumber()
+    .pipe plumber(
+      errorHandler: (error)->
+        console.log error
+        this.emit('end')
+    )
     .pipe sourcemaps.init()
     .pipe coffee(
       bare: true
@@ -82,13 +113,15 @@ gulp.task 'coffee', () ->
     .pipe debug(title: 'end coffee:')
     .pipe remember('coffee')
 
-gulp.task 'watch', ['concat'] , () ->
-  gulp.watch basePath+'cs/pages/*.coffee'
-    .on 'change', (e) ->
-      doConcat(e.path)
+gulp.task 'watch', () ->
+  watch basePath+'cs/pages/*.coffee', (e)->
+    doConcat(e.path)
 
-  gulp.watch basePath+'sass/**/*.scss', ['compass']
-  #gulp.watch basePath+'cs/pages/*.coffee', ['concat']
-  gulp.watch basePath+'cs/*.coffee', ['coffee']
+  watch basePath+'sass/**/*.scss', ->
+    gulp.start(['compass', 'sprite'])
+  watch basePath+'cs/**/*.coffee', ->
+    gulp.start 'coffee'
+  watch basePath+'jade/**/*.jade', ->
+    gulp.start 'jade'
 
 gulp.task 'default', ['watch', 'webserver']
