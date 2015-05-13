@@ -105,7 +105,7 @@ $ ->
   )
   # }}}
 
-  $('a[href^=#]'+'a[href!=#]').click(
+  $('a[href^=#]'+'a[href!=#]').on('click.smoothScroll'
     (e)->
       $(
         if (navigator.userAgent.indexOf('Opera') isnt -1)
