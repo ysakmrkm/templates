@@ -29,24 +29,6 @@ gulp.task 'webserver',() ->
 jadeRef.filters.php = (block) ->
   return "\n<?php\n"+block+"\n?>"
 
-gulp.task 'jade',() ->
-  gulp.src [basePath+'jade/**/*.jade', '!'+basePath+'jade/**/_*.jade']
-    #.pipe cache('jade')
-    .pipe debug(title: 'start jade:')
-    .pipe plumber(
-      errorHandler: (error)->
-        this.emit('end');
-    )
-    .pipe jade(
-      pretty: true
-    )
-    .pipe rename(
-      extname: '.php'
-    )
-    .pipe gulp.dest(basePath+'views/pc/')
-    .pipe debug(title: 'end jade:')
-    #.pipe remember('jade')
-
 gulp.task 'compass',() ->
   gulp.src basePath+'sass/**/*.scss'
     .pipe cache('compass')
@@ -125,7 +107,56 @@ gulp.task 'watch', () ->
     gulp.start(['compass', 'sprite'])
   watch basePath+'cs/**/*.coffee', ->
     gulp.start 'coffee'
-  watch basePath+'jade/**/*.jade', ->
+
+  watch basePath+'src/jade/**/*.jade', (e)->
+    gulp.task 'jade', ()->
+      path = e.path
+
+      partial = ()->
+        return /\/_[^\/]+\.jade/.test(path)
+
+      if path?
+        if partial()
+          path = [basePath+'src/jade/**/*.jade', '!'+basePath+'src/jade/**/_*.jade']
+          destPath = ''
+        else
+          destPath = path.split(basePath+'src/jade/')[1].split('/')[0]+'/'
+
+          if destPath.indexOf('.') isnt -1
+            destPath = ''
+
+        gulp.src path
+          .pipe gulpif(!partial(), cache('jade'))
+          .pipe debug(title: 'start jade:')
+          .pipe plumber(
+            errorHandler: (error)->
+              console.log error
+
+              notifier.notify(
+                title: 'gulp'
+                message: error
+              )
+
+              this.emit('end');
+          )
+          .pipe data(() ->
+            return require('./'+basePath+'src/jade/data.json')
+          )
+          .pipe jade(
+            pretty: true
+          )
+          .pipe rename(
+            extname: '.php'
+          )
+          #.pipe gulp.dest(basePath+'views/pc/'+destPath)
+          .pipe gulp.dest(basePath+destPath)
+          .pipe debug(title: 'end jade:')
+          .pipe gulpif(!partial(), remember('jade'))
+          .on('end',
+            ()->
+              browserSync.reload()
+          )
+
     gulp.start 'jade'
 
 gulp.task 'default', ['watch', 'webserver']
