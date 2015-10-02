@@ -12,6 +12,10 @@ jade = require('gulp-jade')
 jadeRef = require('gulp-jade/node_modules/jade')
 rename = require('gulp-rename')
 del = require('del')
+gulpif = require('gulp-if')
+uglify = require('gulp-uglify')
+data = require('gulp-data')
+notifier = require('node-notifier')
 browserSync = require('browser-sync').create()
 
 basePath = ''
