@@ -27,7 +27,7 @@ gulp.task 'webserver',() ->
   )
 
 jadeRef.filters.php = (block) ->
-  return "<?php\n"+block+"\n?>"
+  return "\n<?php\n"+block+"\n?>"
 
 gulp.task 'jade',() ->
   gulp.src [basePath+'jade/**/*.jade', '!'+basePath+'jade/**/_*.jade']
