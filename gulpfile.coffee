@@ -19,6 +19,7 @@ notifier = require('node-notifier')
 browserSync = require('browser-sync').create()
 
 basePath = ''
+srcPath = 'src/'
 
 gulp.task 'webserver',() ->
   browserSync.init(
@@ -32,8 +33,8 @@ jadeRef.filters.php = (block) ->
 csCommonFolder = 'core'
 csFolder = 'pages'
 csConcatRules = [
-  ['src/cs/'+csCommonFolder+'/common.coffee' , 'src/cs/'+csFolder+'/index.coffee']
-  ['src/cs/'+csCommonFolder+'/common.coffee' , 'src/cs/'+csFolder+'/about.coffee']
+  [srcPath+'cs/'+csCommonFolder+'/common.coffee' , srcPath+'cs/'+csFolder+'/index.coffee']
+  [srcPath+'cs/'+csCommonFolder+'/common.coffee' , srcPath+'cs/'+csFolder+'/about.coffee']
 ]
 
 gulp.task 'watch', () ->
@@ -42,7 +43,7 @@ gulp.task 'watch', () ->
     sass: 0
     jade: 0
 
-  watch [basePath+'src/cs/**/*.coffee', '!'+basePath+'src/cs/*.coffee'], (e)->
+  watch [basePath+srcPath+'cs/**/*.coffee', '!'+basePath+srcPath+'cs/*.coffee'], (e)->
     path = e.path
 
     if path?
@@ -90,7 +91,7 @@ gulp.task 'watch', () ->
               this.emit('end')
           )
           .pipe concat(target)
-          .pipe gulp.dest('src/cs/')
+          .pipe gulp.dest(srcPath+'cs/')
           .pipe debug(title: 'end concat:')
           .on 'finish', ()->
             onEnd()
@@ -123,7 +124,7 @@ gulp.task 'watch', () ->
         )
         .pipe sourcemaps.write(
           './'
-          sourceRoot: '../'+basePath+'src/cs/'
+          sourceRoot: '../'+basePath+srcPath+'cs/'
         )
         .pipe gulp.dest(basePath+'js/')
         .pipe gulpif(!common(), remember('coffee'))
@@ -135,7 +136,7 @@ gulp.task 'watch', () ->
 
     gulp.start 'coffee'
 
-  watch basePath+'src/sass/**/*.scss', (e)->
+  watch basePath+srcPath+'sass/**/*.scss', (e)->
     gulp.task 'compass', ()->
       taskCount.sass++
       path = e.path
@@ -145,7 +146,7 @@ gulp.task 'watch', () ->
 
       if path?
         if partial()
-          path = [basePath+'src/sass/**/*.scss', '!'+basePath+'src/sass/**/_*.scss']
+          path = [basePath+srcPath+'sass/**/*.scss', '!'+basePath+srcPath+'sass/**/_*.scss']
 
         gulp.src path
           .pipe gulpif(!partial(), cache('compass'))
@@ -165,7 +166,7 @@ gulp.task 'watch', () ->
             config_file : './config.rb'
             comments : false
             css : basePath+'css/'
-            sass: basePath+'src/sass/'
+            sass: basePath+srcPath+'sass/'
             #environment: 'production'
           )
           .pipe gulp.dest(basePath+'css/')
@@ -184,7 +185,7 @@ gulp.task 'watch', () ->
 
     gulp.start 'compass'
 
-  watch basePath+'src/jade/**/*.jade', (e)->
+  watch basePath+srcPath+'jade/**/*.jade', (e)->
     gulp.task 'jade', ()->
       path = e.path
 
@@ -193,10 +194,10 @@ gulp.task 'watch', () ->
 
       if path?
         if partial()
-          path = [basePath+'src/jade/**/*.jade', '!'+basePath+'src/jade/**/_*.jade']
+          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
           destPath = ''
         else
-          destPath = path.split(basePath+'src/jade/')[1].split('/')[0]+'/'
+          destPath = path.split(basePath+srcPath+'jade/')[1].split('/')[0]+'/'
 
           if destPath.indexOf('.') isnt -1
             destPath = ''
@@ -216,7 +217,7 @@ gulp.task 'watch', () ->
               this.emit('end');
           )
           .pipe data(() ->
-            return require('./'+basePath+'src/jade/data.json')
+            return require('./'+basePath+srcPath+'jade/data.json')
           )
           .pipe jade(
             pretty: true
