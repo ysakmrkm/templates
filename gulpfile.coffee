@@ -36,29 +36,12 @@ csConcatRules = [
   ['src/cs/'+csCommonFolder+'/common.coffee' , 'src/cs/'+csFolder+'/about.coffee']
 ]
 
-gulp.task 'compass',() ->
-  gulp.src basePath+'sass/**/*.scss'
-    .pipe cache('compass')
-    .pipe debug(title: 'start compass:')
-    .pipe plumber(
-      errorHandler: (error)->
-        console.log error
-        this.emit('end')
-    )
-    .pipe compass(
-      config_file : './config.rb'
-      comments : false
-      css : basePath+'css'
-      sass: basePath+'sass'
-    )
-    .pipe gulp.dest(basePath+'css/')
-    .pipe debug(title: 'end compass:')
-    .pipe remember('compass')
-
-gulp.task 'sprite', ['compass'],() ->
-  del basePath+'img/*-s+([a-z0-9]).png'
-
 gulp.task 'watch', () ->
+  taskCount =
+    coffee: 0
+    sass: 0
+    jade: 0
+
   watch [basePath+'src/cs/**/*.coffee', '!'+basePath+'src/cs/*.coffee'], (e)->
     path = e.path
 
@@ -152,8 +135,54 @@ gulp.task 'watch', () ->
 
     gulp.start 'coffee'
 
-  watch basePath+'sass/**/*.scss', ->
-    gulp.start(['compass', 'sprite'])
+  watch basePath+'src/sass/**/*.scss', (e)->
+    gulp.task 'compass', ()->
+      taskCount.sass++
+      path = e.path
+
+      partial = ()->
+        return /\/_[^\/]+\.scss/.test(path)
+
+      if path?
+        if partial()
+          path = [basePath+'src/sass/**/*.scss', '!'+basePath+'src/sass/**/_*.scss']
+
+        gulp.src path
+          .pipe gulpif(!partial(), cache('compass'))
+          .pipe debug(title: 'start compass:')
+          .pipe plumber(
+            errorHandler: (error)->
+              console.log error
+
+              notifier.notify(
+                title: 'gulp'
+                message: error
+              )
+
+              this.emit('end')
+          )
+          .pipe compass(
+            config_file : './config.rb'
+            comments : false
+            css : basePath+'css/'
+            sass: basePath+'src/sass/'
+            #environment: 'production'
+          )
+          .pipe gulp.dest(basePath+'css/')
+          .pipe gulpif(!partial(), remember('compass'))
+          .pipe debug(title: 'end compass:')
+          .on('end',
+            ()->
+              taskCount.sass--
+
+              if taskCount.sass is 0
+                console.log 'start splite:'
+                del basePath+'img/*-s+([a-z0-9]).png'
+                console.log 'end splite:'
+                browserSync.reload()
+          )
+
+    gulp.start 'compass'
 
   watch basePath+'src/jade/**/*.jade', (e)->
     gulp.task 'jade', ()->
