@@ -29,6 +29,13 @@ gulp.task 'webserver',() ->
 jadeRef.filters.php = (block) ->
   return "\n<?php\n"+block+"\n?>"
 
+csCommonFolder = 'core'
+csFolder = 'pages'
+csConcatRules = [
+  ['src/cs/'+csCommonFolder+'/common.coffee' , 'src/cs/'+csFolder+'/index.coffee']
+  ['src/cs/'+csCommonFolder+'/common.coffee' , 'src/cs/'+csFolder+'/about.coffee']
+]
+
 gulp.task 'compass',() ->
   gulp.src basePath+'sass/**/*.scss'
     .pipe cache('compass')
@@ -51,62 +58,102 @@ gulp.task 'compass',() ->
 gulp.task 'sprite', ['compass'],() ->
   del basePath+'img/*-s+([a-z0-9]).png'
 
-csFiles = [
-  ['cs/core/common.coffee' , 'cs/pages/index.coffee']
-]
-
-doConcat = (path) ->
-  if path?
-    target = path.split('/').reverse()[0]
-
-    src = []
-
-    console.log target
-
-    `getSrc://`
-    for set, i in csFiles
-      for file, j in set
-        if file.indexOf(target) isnt -1
-          src = set
-          `break getSrc`
-
-    console.log src
-
-    gulp.src src
-      .pipe debug(title: 'start concat:')
-      .pipe concat(target)
-      .pipe gulp.dest('cs/')
-      .pipe debug(title: 'end concat:')
-
-gulp.task 'coffee', () ->
-  gulp.src [basePath+'cs/*.coffee']
-    .pipe cache('coffee')
-    .pipe debug(title: 'start coffee:')
-    .pipe plumber(
-      errorHandler: (error)->
-        console.log error
-        this.emit('end')
-    )
-    .pipe sourcemaps.init()
-    .pipe coffee(
-      bare: true
-    )
-    .pipe sourcemaps.write(
-      './'
-      sourceRoot: basePath+'cs/'
-    )
-    .pipe gulp.dest(basePath+'js/')
-    .pipe debug(title: 'end coffee:')
-    .pipe remember('coffee')
-
 gulp.task 'watch', () ->
-  watch basePath+'cs/pages/*.coffee', (e)->
-    doConcat(e.path)
+  watch [basePath+'src/cs/**/*.coffee', '!'+basePath+'src/cs/*.coffee'], (e)->
+    path = e.path
+
+    if path?
+      folder = path.split('/').reverse()[1]
+      target = path.split('/').reverse()[0]
+
+    common = ()->
+      return folder is csCommonFolder
+
+    gulp.task 'concat', (callback)->
+      src = []
+
+      `getSrc://`
+      for set, i in csConcatRules
+        for file, j in set
+          if file.indexOf(target) isnt -1
+            src[0] = set
+            `break getSrc`
+
+      if common()
+        src = csConcatRules
+
+      waitMax   = src.length
+      waitCount = 0
+
+      onEnd = ()->
+        if waitMax is ++waitCount
+          callback()
+
+      for key, val of src
+        if common()
+          target = val[1].split('/').reverse()[0]
+
+        gulp.src val
+          .pipe debug(title: 'start concat:')
+          .pipe plumber(
+            errorHandler: (error)->
+              console.log error
+
+              notifier.notify(
+                title: 'gulp'
+                message: error
+              )
+
+              this.emit('end')
+          )
+          .pipe concat(target)
+          .pipe gulp.dest('src/cs/')
+          .pipe debug(title: 'end concat:')
+          .on 'finish', ()->
+            onEnd()
+
+    gulp.task 'coffee', ['concat'], ()->
+      if common()
+        regexp = new RegExp(csCommonFolder+'.*$')
+        path = path.replace(regexp, '*.coffee')
+      else
+        path = path.replace('/'+csFolder, '')
+
+      gulp.src path
+        .pipe debug(title: 'start coffee:')
+        .pipe gulpif(!common(), cache('coffee'))
+        .pipe plumber(
+          errorHandler: (error)->
+            console.log error
+
+            notifier.notify(
+              title: 'gulp'
+              message: error
+            )
+
+            this.emit('end')
+        )
+        #.pipe uglify()
+        .pipe sourcemaps.init()
+        .pipe coffee(
+          bare: true
+        )
+        .pipe sourcemaps.write(
+          './'
+          sourceRoot: '../'+basePath+'src/cs/'
+        )
+        .pipe gulp.dest(basePath+'js/')
+        .pipe gulpif(!common(), remember('coffee'))
+        .pipe debug(title: 'end coffee:')
+        .on('end',
+          ()->
+            browserSync.reload()
+        )
+
+    gulp.start 'coffee'
 
   watch basePath+'sass/**/*.scss', ->
     gulp.start(['compass', 'sprite'])
-  watch basePath+'cs/**/*.coffee', ->
-    gulp.start 'coffee'
 
   watch basePath+'src/jade/**/*.jade', (e)->
     gulp.task 'jade', ()->
