@@ -1,6 +1,7 @@
 {
   "author": "ysakmrkm",
   "devDependencies": {
+    "browser-sync": "^2.8.2",
     "coffee-script": "^1.7.1",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
@@ -15,7 +16,6 @@
     "gulp-remember": "^0.3.0",
     "gulp-rename": "^1.2.0",
     "gulp-sourcemaps": "^1.3.0",
-    "gulp-watch": "^4.2.4",
-    "gulp-webserver": "^0.9.0"
+    "gulp-watch": "^4.2.4"
   }
 }

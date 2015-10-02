@@ -2,7 +2,6 @@ gulp = require('gulp')
 compass = require('gulp-compass')
 coffee = require('gulp-coffee')
 concat = require('gulp-concat')
-webserver = require('gulp-webserver')
 sourcemaps = require('gulp-sourcemaps')
 plumber = require('gulp-plumber')
 debug = require('gulp-debug')
@@ -13,14 +12,15 @@ jade = require('gulp-jade')
 jadeRef = require('gulp-jade/node_modules/jade')
 rename = require('gulp-rename')
 del = require('del')
+browserSync = require('browser-sync').create()
 
 basePath = ''
 
 gulp.task 'webserver',() ->
-  gulp.src './'
-    .pipe webserver(
-      livereload: true
-    )
+  browserSync.init(
+    proxy: 'localhost/project_name/'
+    notify: false
+  )
 
 jadeRef.filters.php = (block) ->
   return "<?php\n"+block+"\n?>"
