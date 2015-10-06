@@ -194,7 +194,7 @@ gulp.task 'watch', () ->
 
       if path?
         if partial()
-          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
+          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+'src/jade/**/mixin.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
           destPath = ''
         else
           destPath = path.split(basePath+srcPath+'jade/')[1].split('/')[0]+'/'
