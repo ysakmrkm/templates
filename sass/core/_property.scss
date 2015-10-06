@@ -1,6 +1,13 @@
-//$pie-behavior:url("path_to_css/PIE.htc");
-//$pie-base-class:pie-element;
-$experimental-support-for-svg:true;
+$graceful-usage-threshold: 0.1;
+$critical-usage-threshold: 0.01;
+$supported-browsers: ("chrome", "safari", "firefox", "ie");
+$browser-minimum-versions: ("firefox": "33", "ie": "9");
+
+//$debug-browser-support: true;
+@debug "$graceful-usage-threshold is:" $graceful-usage-threshold;
+@debug "$critical-usage-threshold is:" $critical-usage-threshold;
+@debug "$supported-browsers is:" $supported-browsers;
+@debug "$browser-minimum-versions is:" $browser-minimum-versions;
 
 $mouseover:.15s;
 
