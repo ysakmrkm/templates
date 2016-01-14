@@ -1,7 +1,7 @@
 $graceful-usage-threshold: 0.1;
 $critical-usage-threshold: 0.01;
 $supported-browsers: ("chrome", "safari", "firefox", "ie");
-$browser-minimum-versions: ("firefox": "33", "ie": "9");
+$browser-minimum-versions: ("firefox": "33", "ie": "10");
 
 //$debug-browser-support: true;
 @debug "$graceful-usage-threshold is:" $graceful-usage-threshold;
