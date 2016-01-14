@@ -161,6 +161,7 @@
 	}
 
 	input[type="search"] {
+		box-sizing: content-box;
 		-webkit-appearance: none;
 
 		&::-webkit-search-cancel-button ,
