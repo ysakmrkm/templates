@@ -2,6 +2,7 @@ gulp = require('gulp')
 compass = require('gulp-compass')
 forEach = require('gulp-foreach')
 grapher = require('sass-graph')
+scsslint = require('gulp-scss-lint')
 coffee = require('gulp-coffee')
 concat = require('gulp-concat')
 sourcemaps = require('gulp-sourcemaps')
@@ -71,6 +72,7 @@ gulp.task 'sass', ->
       gulp.src files, {base: baseDir}
     )
     .pipe debug(title: 'sass compile:'+files)
+    .pipe scsslint('config': 'scss-lint.yml')
     .pipe compass(
       config_file : './config.rb'
       comments : false
