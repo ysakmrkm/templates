@@ -15,7 +15,7 @@ del = require('del')
 gulpif = require('gulp-if')
 uglify = require('gulp-uglify')
 data = require('gulp-data')
-notifier = require('node-notifier')
+notify = require('gulp-notify')
 browserSync = require('browser-sync').create()
 
 basePath = ''
@@ -80,15 +80,13 @@ gulp.task 'watch', () ->
         gulp.src val
           .pipe debug(title: 'start concat:')
           .pipe plumber(
-            errorHandler: (error)->
-              console.log error
-
-              notifier.notify(
-                title: 'gulp'
-                message: error
+            errorHandler:
+              notify.onError(
+                title: "coffee concat error"
+                message: "<%= error %>"
               )
 
-              this.emit('end')
+            this.emit('end')
           )
           .pipe concat(target)
           .pipe gulp.dest(srcPath+'cs/')
@@ -107,15 +105,13 @@ gulp.task 'watch', () ->
         .pipe debug(title: 'start coffee:')
         .pipe gulpif(!common(), cache('coffee'))
         .pipe plumber(
-          errorHandler: (error)->
-            console.log error
-
-            notifier.notify(
-              title: 'gulp'
-              message: error
+          errorHandler:
+            notify.onError(
+              title: "coffee compile error"
+              message: "<%= error %>"
             )
 
-            this.emit('end')
+          this.emit('end')
         )
         #.pipe uglify()
         .pipe sourcemaps.init()
@@ -153,14 +149,10 @@ gulp.task 'watch', () ->
           .pipe debug(title: 'start compass:')
           .pipe plumber(
             errorHandler: (error)->
-              console.log error
-
-              notifier.notify(
-                title: 'gulp'
-                message: error
+              notify.onError(
+                title: "sass compile error"
+                message: "<%= error %>"
               )
-
-              this.emit('end')
           )
           .pipe compass(
             config_file : './config.rb'
@@ -206,15 +198,13 @@ gulp.task 'watch', () ->
           .pipe gulpif(!partial(), cache('jade'))
           .pipe debug(title: 'start jade:')
           .pipe plumber(
-            errorHandler: (error)->
-              console.log error
-
-              notifier.notify(
-                title: 'gulp'
-                message: error
+            errorHandler:
+              notify.onError(
+                title: "jade compile error"
+                message: "<%= error %>"
               )
 
-              this.emit('end');
+            this.emit('end')
           )
           .pipe data(() ->
             return require('./'+basePath+srcPath+'jade/data.json')
