@@ -4,6 +4,7 @@ forEach = require('gulp-foreach')
 grapher = require('sass-graph')
 scsslint = require('gulp-scss-lint')
 coffee = require('gulp-coffee')
+coffeeLint = require('gulp-coffeelint')
 concat = require('gulp-concat')
 sourcemaps = require('gulp-sourcemaps')
 plumber = require('gulp-plumber')
@@ -168,6 +169,8 @@ gulp.task 'watch', () ->
 
           this.emit('end')
         )
+        .pipe coffeeLint()
+        .pipe coffeeLint.reporter('coffeelint-stylish')
         #.pipe uglify()
         .pipe sourcemaps.init()
         .pipe coffee(
