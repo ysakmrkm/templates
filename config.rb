@@ -47,10 +47,9 @@ end
 #スプライト画像の後ろに付くランダム文字列を除去
 # Make a copy of sprites with a name that has no uniqueness of the hash.
 on_sprite_saved do |filename|
-  #if File.exists?(filename)
-  #  FileUtils.cp filename, filename.gsub(%r{-s[a-z0-9]{10}\.png$}, '.png')
-  #  FileUtils.rm_rf(filename)
-  #end
+  if File.exists?(filename)
+    FileUtils.cp filename, filename.gsub(%r{-s[a-z0-9]{10}\.png$}, '.png')
+  end
 end
 
 # CSSファイル保存時
@@ -61,12 +60,12 @@ on_stylesheet_saved do |filename|
            "#{File.basename(filename)} updated!", -1
 
   # CSSファイル内 スプライト画像後ろのランダム文字列削除
-  #if File.exists?(filename)
-  #  css = File.read filename
-  #  File.open(filename, 'w+') do |f|
-  #    f << css.gsub(%r{-s[a-z0-9]{10}\.png}, '.png')
-  #  end
-  #end
+  if File.exists?(filename)
+    css = File.read filename
+    File.open(filename, 'w+') do |f|
+      f << css.gsub(%r{-s[a-z0-9]{10}\.png}, '.png')
+    end
+  end
 end
 
 # CSSファイルエラー発生時

@@ -1,5 +1,7 @@
 gulp = require('gulp')
 compass = require('gulp-compass')
+forEach = require('gulp-foreach')
+grapher = require('sass-graph')
 coffee = require('gulp-coffee')
 concat = require('gulp-concat')
 sourcemaps = require('gulp-sourcemaps')
@@ -20,6 +22,8 @@ browserSync = require('browser-sync').create()
 
 basePath = ''
 srcPath = 'src/'
+destPath = ''
+gulp.watching = false
 
 gulp.task 'webserver',() ->
   browserSync.init(
@@ -37,11 +41,60 @@ csConcatRules = [
   [srcPath+'cs/'+csCommonFolder+'/common.coffee' , srcPath+'cs/'+csFolder+'/about.coffee']
 ]
 
+gulp.task 'sass', ->
+  baseDir = srcPath+destPath+"sass/"
+  graph = grapher.parseDir(baseDir)
+  files = []
+
+  gulp.src "#{baseDir}**/*.scss"
+    .pipe debug(title: 'start compass:')
+    .pipe plumber(
+      errorHandler:
+        notify.onError(
+          title: "sass compile error"
+          message: "<%= error %>"
+        )
+
+      this.emit('end')
+    )
+    .pipe cache('sass')
+    .pipe gulpif(@watching, forEach (currentStream, file) ->
+      files = [file.path]
+
+      addParent = (childPath)->
+        graph.visitAncestors childPath, (parent) ->
+          files.push(parent)
+          addParent(parent)
+
+      addParent(file.path)
+
+      gulp.src files, {base: baseDir}
+    )
+    .pipe debug(title: 'sass compile:'+files)
+    .pipe compass(
+      config_file : './config.rb'
+      comments : false
+      css : basePath+'css/'
+      sass: basePath+srcPath+'sass/'
+      #environment: 'production'
+    )
+    .pipe gulp.dest(destPath+"css")
+    .pipe debug(title: 'end compass:')
+    .on('end',
+      ()->
+        console.log 'start splite:'
+        del basePath+'img/*-s+([a-z0-9]).png'
+        console.log 'end splite:'
+        browserSync.reload()
+    )
+
 gulp.task 'watch', () ->
+  @watching = true
   taskCount =
     coffee: 0
-    sass: 0
     jade: 0
+
+  gulp.watch srcPath+"**/sass/**/*.scss", ['sass']
 
   watch [basePath+srcPath+'cs/**/*.coffee', '!'+basePath+srcPath+'cs/*.coffee'], (e)->
     path = e.path
@@ -131,51 +184,6 @@ gulp.task 'watch', () ->
         )
 
     gulp.start 'coffee'
-
-  watch basePath+srcPath+'sass/**/*.scss', (e)->
-    gulp.task 'compass', ()->
-      taskCount.sass++
-      path = e.path
-
-      partial = ()->
-        return /\/_[^\/]+\.scss/.test(path)
-
-      if path?
-        if partial()
-          path = [basePath+srcPath+'sass/**/*.scss', '!'+basePath+srcPath+'sass/**/_*.scss']
-
-        gulp.src path
-          .pipe gulpif(!partial(), cache('compass'))
-          .pipe debug(title: 'start compass:')
-          .pipe plumber(
-            errorHandler: (error)->
-              notify.onError(
-                title: "sass compile error"
-                message: "<%= error %>"
-              )
-          )
-          .pipe compass(
-            config_file : './config.rb'
-            comments : false
-            css : basePath+'css/'
-            sass: basePath+srcPath+'sass/'
-            #environment: 'production'
-          )
-          .pipe gulp.dest(basePath+'css/')
-          .pipe gulpif(!partial(), remember('compass'))
-          .pipe debug(title: 'end compass:')
-          .on('end',
-            ()->
-              taskCount.sass--
-
-              if taskCount.sass is 0
-                console.log 'start splite:'
-                del basePath+'img/*-s+([a-z0-9]).png'
-                console.log 'end splite:'
-                browserSync.reload()
-          )
-
-    gulp.start 'compass'
 
   watch basePath+srcPath+'jade/**/*.jade', (e)->
     gulp.task 'jade', ()->
