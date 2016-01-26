@@ -14,6 +14,7 @@ remember = require('gulp-remember')
 watch = require('gulp-watch')
 jade = require('gulp-jade')
 jadeRef = require('gulp-jade/node_modules/jade')
+puglint = require('gulp-pug-lint')
 rename = require('gulp-rename')
 del = require('del')
 gulpif = require('gulp-if')
@@ -193,6 +194,9 @@ gulp.task 'watch', () ->
   watch basePath+srcPath+'jade/**/*.jade', (e)->
     gulp.task 'jade', ()->
       path = e.path
+
+      gulp.src path
+        .pipe puglint()
 
       partial = ()->
         return /\/_[^\/]+\.jade/.test(path)
