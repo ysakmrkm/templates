@@ -169,7 +169,7 @@ gulp.task 'watch', () ->
 
           this.emit('end')
         )
-        .pipe coffeeLint()
+        .pipe coffeeLint('./coffeelint.json')
         .pipe coffeeLint.reporter('coffeelint-stylish')
         #.pipe uglify()
         .pipe sourcemaps.init()
