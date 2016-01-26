@@ -204,12 +204,12 @@ gulp.task 'watch', () ->
       if path?
         if partial()
           path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+'src/jade/**/mixin.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
-          destPath = ''
+          jadeDestPath = ''
         else
-          destPath = path.split(basePath+srcPath+'jade/')[1].split('/')[0]+'/'
+          jadeDestPath = path.split(basePath+srcPath+'jade/')[1].split('/')[0]+'/'
 
-          if destPath.indexOf('.') isnt -1
-            destPath = ''
+          if jadeDestPath.indexOf('.') isnt -1
+            jadeDestPath = ''
 
         gulp.src path
           .pipe gulpif(!partial(), cache('jade'))
@@ -232,8 +232,8 @@ gulp.task 'watch', () ->
           .pipe rename(
             extname: '.php'
           )
-          #.pipe gulp.dest(basePath+'views/pc/'+destPath)
-          .pipe gulp.dest(basePath+destPath)
+          #.pipe gulp.dest(basePath+'views/pc/'+jadeDestPath)
+          .pipe gulp.dest(basePath+jadeDestPath)
           .pipe debug(title: 'end jade:')
           .pipe gulpif(!partial(), remember('jade'))
           .on('end',
