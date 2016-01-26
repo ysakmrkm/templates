@@ -139,12 +139,6 @@ linters:
       - order
       - clear
       - float
-      - width
-      - min-width
-      - max-width
-      - height
-      - min-height
-      - max-height
       - margin
       - margin-top
       - margin-right
@@ -155,6 +149,12 @@ linters:
       - padding-right
       - padding-bottom
       - padding-left
+      - width
+      - min-width
+      - max-width
+      - height
+      - min-height
+      - max-height
       - border
       - border-top
       - border-right
@@ -246,7 +246,7 @@ linters:
 
   QualifyingElement:
     enabled: true
-    allow_element_with_attribute: false
+    allow_element_with_attribute: true
     allow_element_with_class: false
     allow_element_with_id: false
 
@@ -298,7 +298,7 @@ linters:
 
   StringQuotes:
     enabled: true
-    style: double_quotes # or double_quotes
+    style: single_quotes # or double_quotes
 
   TrailingSemicolon:
     enabled: true
@@ -322,7 +322,7 @@ linters:
     enabled: true
 
   UrlQuotes:
-    enabled: true
+    enabled: false
 
   VariableForProperty:
     enabled: false
