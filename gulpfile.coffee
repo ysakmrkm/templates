@@ -1,3 +1,4 @@
+path = require('path')
 gulp = require('gulp')
 compass = require('gulp-compass')
 forEach = require('gulp-foreach')
@@ -26,11 +27,12 @@ browserSync = require('browser-sync').create()
 basePath = ''
 srcPath = 'src/'
 destPath = ''
+projectFolder = path.resolve('').split('/').reverse()[0]
 gulp.watching = false
 
 gulp.task 'webserver',() ->
   browserSync.init(
-    proxy: 'localhost/project_name/'
+    proxy: 'localhost/'+projectFolder+'/'
     notify: false
   )
 
