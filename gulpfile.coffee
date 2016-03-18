@@ -208,7 +208,9 @@ gulp.task 'watch', () ->
           path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+'src/jade/**/mixin.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
           jadeDestPath = ''
         else
-          jadeDestPath = path.split(basePath+srcPath+'jade/')[1].split('/')[0]+'/'
+          jadeDestPath = path.split(basePath+srcPath+'jade/')[1].split('/')
+          jadeDestPath.pop()
+          jadeDestPath = jadeDestPath.join('/')+'/'
 
           if jadeDestPath.indexOf('.') isnt -1
             jadeDestPath = ''
