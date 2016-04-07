@@ -247,4 +247,4 @@ gulp.task 'watch', () ->
 
     gulp.start 'jade'
 
-gulp.task 'default', ['watch', 'webserver']
+gulp.task 'default', ['webserver', 'watch']
