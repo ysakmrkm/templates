@@ -89,7 +89,7 @@ gulp.task 'sass', ->
     .on('end',
       ()->
         console.log 'start splite:'
-        del basePath+'img/*-s+([a-z0-9]).png'
+        del basePath+'img/**/*-s+([a-z0-9]).png'
         console.log 'end splite:'
         browserSync.reload()
     )
