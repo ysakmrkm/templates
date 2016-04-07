@@ -214,7 +214,7 @@ gulp.task 'watch', () ->
           jadeDestPath.pop()
           jadeDestPath = jadeDestPath.join('/')+'/'
 
-          if jadeDestPath.indexOf('.') isnt -1
+          if jadeDestPath.indexOf('.') isnt -1 or jadeDestPath is '/'
             jadeDestPath = ''
 
         gulp.src path
