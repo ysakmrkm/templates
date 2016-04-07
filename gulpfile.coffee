@@ -76,7 +76,9 @@ gulp.task 'sass', ->
       gulp.src files, {base: baseDir}
     )
     .pipe debug(title: 'sass compile:'+files)
+    .pipe debug(title: 'start lint:')
     .pipe scsslint('config': 'scss-lint.yml')
+    .pipe debug(title: 'end lint:')
     .pipe compass(
       config_file : './config.rb'
       comments : false
