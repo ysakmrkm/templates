@@ -23,16 +23,22 @@ uglify = require('gulp-uglify')
 data = require('gulp-data')
 notify = require('gulp-notify')
 browserSync = require('browser-sync').create()
+minimist = require('minimist')
+args = minimist(process.argv.slice(2))
 
-basePath = ''
+# --target
+targetFolder = if args.target? and args.target.indexOf('/') is -1 then args.target+'/' else args.target
+basePath = if targetFolder? then targetFolder else ''
 srcPath = 'src/'
 destPath = ''
-projectFolder = path.resolve('').split('/').reverse()[0]
+currentPath = path.resolve('')
+currentFolder = currentPath.split('/').reverse()[0]
+projectFolder = path.resolve('', '../').split('/').reverse()[0]+'/'+currentFolder
 gulp.watching = false
 
 gulp.task 'webserver',() ->
   browserSync.init(
-    proxy: 'localhost/'+projectFolder+'/'
+    proxy: if targetFolder? then 'localhost/'+currentFolder+'/'+targetFolder else 'localhost/'+currentFolder+'/'
     notify: false
   )
 
@@ -42,12 +48,11 @@ jadeRef.filters.php = (block) ->
 csCommonFolder = 'core'
 csFolder = 'pages'
 csConcatRules = [
-  [srcPath+'cs/'+csCommonFolder+'/common.coffee' , srcPath+'cs/'+csFolder+'/index.coffee']
-  [srcPath+'cs/'+csCommonFolder+'/common.coffee' , srcPath+'cs/'+csFolder+'/about.coffee']
+  [basePath+srcPath+'cs/'+csCommonFolder+'/common.coffee' , basePath+srcPath+'cs/'+csFolder+'/index.coffee']
 ]
 
 gulp.task 'sass', ->
-  baseDir = srcPath+destPath+"sass/"
+  baseDir = basePath+srcPath+"sass/"
   graph = grapher.parseDir(baseDir)
   files = []
 
@@ -80,10 +85,12 @@ gulp.task 'sass', ->
     .pipe scsslint('config': 'scss-lint.yml')
     .pipe debug(title: 'end lint:')
     .pipe compass(
-      config_file : './config.rb'
-      comments : false
-      css : basePath+'css/'
-      sass: basePath+srcPath+'sass/'
+      config_file : currentPath+'/config.rb'
+      project: currentPath+'/'+basePath
+      css : 'css'
+      sass: srcPath+'sass'
+      image: 'img'
+      javascript: 'js'
       #environment: 'production'
     )
     .pipe gulp.dest(destPath+"css")
@@ -102,7 +109,7 @@ gulp.task 'watch', () ->
     coffee: 0
     jade: 0
 
-  gulp.watch srcPath+"**/sass/**/*.scss", ['sass']
+  gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['sass']
 
   watch [basePath+srcPath+'cs/**/*.coffee', '!'+basePath+srcPath+'cs/*.coffee'], (e)->
     path = e.path
@@ -150,7 +157,7 @@ gulp.task 'watch', () ->
             this.emit('end')
           )
           .pipe concat(target)
-          .pipe gulp.dest(srcPath+'cs/')
+          .pipe gulp.dest(basePath+srcPath+'cs/')
           .pipe debug(title: 'end concat:')
           .on 'finish', ()->
             onEnd()
@@ -207,7 +214,7 @@ gulp.task 'watch', () ->
 
       if path?
         if partial()
-          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+'src/jade/**/mixin.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
+          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+srcPath+'jade/**/mixin.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
           jadeDestPath = ''
         else
           jadeDestPath = path.split(basePath+srcPath+'jade/')[1].split('/')
