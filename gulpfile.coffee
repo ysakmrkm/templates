@@ -6,7 +6,7 @@ grapher = require('sass-graph')
 scsslint = require('gulp-scss-lint')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
-concat = require('gulp-concat')
+concat = require('gulp-concat-util')
 sourcemaps = require('gulp-sourcemaps')
 plumber = require('gulp-plumber')
 debug = require('gulp-debug')
@@ -48,7 +48,10 @@ jadeRef.filters.php = (block) ->
 csCommonFolder = 'core'
 csFolder = 'pages'
 csConcatRules = [
-  [basePath+srcPath+'cs/'+csCommonFolder+'/common.coffee' , basePath+srcPath+'cs/'+csFolder+'/index.coffee']
+  [basePath+srcPath+'cs/'+csCommonFolder+'/functions.coffee',
+  basePath+srcPath+'cs/'+csCommonFolder+'/header.coffee',
+  basePath+srcPath+'cs/'+csFolder+'/index.coffee',
+  basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
 ]
 
 gulp.task 'sass', ->
@@ -143,7 +146,9 @@ gulp.task 'watch', () ->
 
       for key, val of src
         if common()
-          target = val[1].split('/').reverse()[0]
+          for key2, file of val
+            if file.indexOf(csFolder) isnt -1
+              target = val[key2].split('/').reverse()[0]
 
         gulp.src val
           .pipe debug(title: 'start concat:')
@@ -156,7 +161,18 @@ gulp.task 'watch', () ->
 
             this.emit('end')
           )
-          .pipe concat(target)
+          .pipe concat(target, {
+            process:
+              (src, filePath)->
+                if filePath.indexOf(csFolder) isnt -1
+                  src = src.split('\n')
+                  for text, key in src
+                    src[key] = '  '+text
+
+                  src = src.join('\n')
+
+                return src
+          })
           .pipe gulp.dest(basePath+srcPath+'cs/')
           .pipe debug(title: 'end concat:')
           .on 'finish', ()->
