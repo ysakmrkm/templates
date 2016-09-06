@@ -12,79 +12,79 @@
 	@return margin($margin,$lheight,$base,$unit);
 }
 
-@function pxtoem($target,$base){
-	@return ($target / $base)+em;
-}
-
-@function emtopx($target,$base){
-	@return ($target * $base)+px;
-}
-
-@function dummytext($length){
-	//$base:t h i s \  i s \  d u m m y \  t e x t \,;
-	$base:こ こ に 文 章 が 入 り ま す 。;
-	$text:'';
-	$num:floor($length / length($base));
-	$rest:$length % length($base);
-
-	@if $length <= length($base){
-		@for $i from 1 through $length {
-			@if nth($base,$i) == '\ ' {
-				$text:$text+' ';
-			} @else if nth($base,$i) == '\.' {
-				$text:$text+'.';
-			} @else if nth($base,$i) == '\,' {
-				$text:$text+',';
-			} @else {
-				$text:$text+nth($base,$i);
-			}
-		}
-
-	} @else {
-		@for $i from 1 through $num {
-			@for $j from 1 through length($base) {
-				@if nth($base,$j) == '\ ' {
-					$text:$text+' ';
-				} @else if nth($base,$j) == '\.' {
-					$text:$text+'.';
-				} @else if nth($base,$j) == '\,' {
-					$text:$text+',';
-				} @else {
-					$text:$text+nth($base,$j);
-				}
-			}
-		}
-
-		@if $rest != 0 {
-			@for $k from 1 through length($rest) {
-				@if nth($base,$k) == '\ ' {
-					$text:$text+' ';
-				} @else if nth($base,$k) == '\.' {
-					$text:$text+'.';
-				} @else if nth($base,$k) == '\,' {
-					$text:$text+',';
-				} @else {
-					$text:$text+nth($base,$k);
-				}
-			}
-		}
-	}
-
-	@return $text;
-}
-
-@function width($num){
-		@return nth($width,$num);
-}
-
-@function color($num){
-		@return nth($color,$num);
-}
-
-@function line_height($num){
-		@return nth($line_height,$num);
-}
-
-@function font_color($num){
-		@return nth($font_color,$num);
-}
+// @function pxtoem($target,$base){
+// 	@return ($target / $base)+em;
+// }
+//
+// @function emtopx($target,$base){
+// 	@return ($target * $base)+px;
+// }
+//
+// @function dummytext($length){
+// 	//$base:t h i s \  i s \  d u m m y \  t e x t \,;
+// 	$base:こ こ に 文 章 が 入 り ま す 。;
+// 	$text:'';
+// 	$num:floor($length / length($base));
+// 	$rest:$length % length($base);
+//
+// 	@if $length <= length($base){
+// 		@for $i from 1 through $length {
+// 			@if nth($base,$i) == '\ ' {
+// 				$text:$text+' ';
+// 			} @else if nth($base,$i) == '\.' {
+// 				$text:$text+'.';
+// 			} @else if nth($base,$i) == '\,' {
+// 				$text:$text+',';
+// 			} @else {
+// 				$text:$text+nth($base,$i);
+// 			}
+// 		}
+//
+// 	} @else {
+// 		@for $i from 1 through $num {
+// 			@for $j from 1 through length($base) {
+// 				@if nth($base,$j) == '\ ' {
+// 					$text:$text+' ';
+// 				} @else if nth($base,$j) == '\.' {
+// 					$text:$text+'.';
+// 				} @else if nth($base,$j) == '\,' {
+// 					$text:$text+',';
+// 				} @else {
+// 					$text:$text+nth($base,$j);
+// 				}
+// 			}
+// 		}
+//
+// 		@if $rest != 0 {
+// 			@for $k from 1 through length($rest) {
+// 				@if nth($base,$k) == '\ ' {
+// 					$text:$text+' ';
+// 				} @else if nth($base,$k) == '\.' {
+// 					$text:$text+'.';
+// 				} @else if nth($base,$k) == '\,' {
+// 					$text:$text+',';
+// 				} @else {
+// 					$text:$text+nth($base,$k);
+// 				}
+// 			}
+// 		}
+// 	}
+//
+// 	@return $text;
+// }
+//
+// @function width($num){
+// 		@return nth($width,$num);
+// }
+//
+// @function color($num){
+// 		@return nth($color,$num);
+// }
+//
+// @function line_height($num){
+// 		@return nth($line_height,$num);
+// }
+//
+// @function font_color($num){
+// 		@return nth($font_color,$num);
+// }
