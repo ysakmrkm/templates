@@ -35,7 +35,7 @@ $(()->
       footerHeight()
   )
 
-  $('a[href^=#]'+'a[href!=#]').on('click.smoothScroll'
+  $('a[href^="#"]'+'a[href!="#"]').on('click.smoothScroll'
     (e)->
       $(
         if (navigator.userAgent.indexOf('Opera') isnt -1)
