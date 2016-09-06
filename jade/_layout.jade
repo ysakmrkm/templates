@@ -49,20 +49,20 @@ html(lang="ja")
     <?php } ?>
     block head
 
-  body&attributes({'id': pageId, 'class': pageClass})
+  body(itemscope='itemscope', itemtype='http://schema.org/WebPage')&attributes({'id': pageId, 'class': pageClass})
     #container
-      header#header
+      header(role='banner', itemscope='itemscope', itemtype='http://schema.org/WPHeader')#header
         block header
 
       #content
-        main
+        main(role='main')
           article#main
             block main
 
-          aside#sub
+          aside(role='complementary', itemscope='itemscope', itemtype='http://schema.org/WPSideBar')#sub
             block sub
 
-      footer#footer
+      footer(role='contentinfo', itemscope='itemscope', itemtype='http://schema.org/WPFooter')#footer
         block footer
 
     script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
