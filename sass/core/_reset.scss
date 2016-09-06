@@ -14,10 +14,10 @@
 	td ,
 	input ,
 	textarea {
-		margin:0;
-		padding:0;
-		line-height:1;
-		font-style:normal;
+		margin: 0;
+		padding: 0;
+		line-height: 1;
+		font-style: normal;
 	}
 
 	html {
@@ -26,35 +26,35 @@
 	}
 
 	h1 , h2 , h3 , h4 , h5 , h6 {
-		font-size:1em;
-		font-weight:normal;
+		font-size: 1em;
+		font-weight: normal;
 	}
 
 	small {
-		font-size:1em;
+		font-size: 1em;
 	}
 
 	mark {
-		background:none;
+		background: none;
 	}
 
 	fieldset {
-		border:none;
+		border: 0;
 	}
 
 	table {
-		border-collapse:collapse;
-		border-spacing:0px;
-		font-size:inherit;
-		font:100%;
+		border-collapse: collapse;
+		border-spacing: 0;
+		font: 100%;
+		font-size: inherit;
 	}
 
 	li {
-		list-style-type:none;
+		list-style-type: none;
 	}
 
 	dd {
-		margin:0;
+		margin: 0;
 	}
 
 	a ,
@@ -72,39 +72,39 @@
 	select ,
 	label ,
 	caption {
-		font-weight:normal;
-		font-style:normal;
+		font-weight: normal;
+		font-style: normal;
 	}
 
 	a {
-		text-decoration:none;
+		text-decoration: none;
 	}
 
 	img {
-		border:none;
-		vertical-align:bottom;
+		border: 0;
+		vertical-align: bottom;
 	}
 
 	caption , th {
-		font-weight:normal;
-		text-align:left;
+		text-align: left;
+		font-weight: normal;
 	}
 
 	th , td {
-		padding:0px;
+		padding: 0;
 	}
 
 	input , textarea , select {
-		font-family:inherit;
-		font-size:inherit;
+		font-family: inherit;
+		font-size: inherit;
 	}
 
 	textarea {
-		vertical-align:top;
+		vertical-align: top;
 	}
 
 	iframe {
-		border: none;
+		border: 0;
 	}
 
 	//以下未定義要素
@@ -136,9 +136,9 @@
 	header , footer , article , section , aside ,
 	nav ,
 	figure , figcaption {
-		display:block;
-		margin:0;
-		padding:0;
+		display: block;
+		margin: 0;
+		padding: 0;
 	}
 
 	input[type="search"] {

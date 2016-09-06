@@ -1,18 +1,18 @@
 @mixin layout-tags {
 	html ,
 	body {
-		height:100%;
+		height: 100%;
 	}
 
 	body {
-		-webkit-text-size-adjust:100%;
+		-webkit-text-size-adjust: 100%;
 	}
 
 	a {
 		& ,
-		&:before ,
-		&:after {
-			@include transition(background-color $mouseover linear,background-image $mouseover linear);
+		&::before ,
+		&::after {
+			@include transition(background-color $mouseover linear, background-image $mouseover linear);
 		}
 
 		> * {
@@ -24,11 +24,11 @@
 		}
 
 		&:hover {
-			text-decoration:underline;
+			text-decoration: underline;
 
 			> * {
 				@include opacity(0);
-				text-decoration:none;
+				text-decoration: none;
 			}
 		}
 	}
@@ -36,11 +36,11 @@
 
 @mixin layout-container {
 	.l-container {
-		position:relative;
-		min-height:100%;
+		position: relative;
+		min-height: 100%;
 
 		body > & {
-			height:auto;
+			height: auto;
 		}
 	}
 }
@@ -79,8 +79,8 @@
 
 @mixin layout-footer {
 	.l-footer {
-		position:absolute;
-		bottom:0;
-		width:100%;
+		position: absolute;
+		bottom: 0;
+		width: 100%;
 	}
 }

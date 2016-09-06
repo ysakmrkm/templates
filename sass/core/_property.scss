@@ -1,17 +1,17 @@
-$graceful-usage-threshold: 0.1;
-$critical-usage-threshold: 0.01;
-$supported-browsers: ("chrome", "safari", "firefox", "ie");
-$browser-minimum-versions: ("firefox": "33", "ie": "10");
+$graceful-usage-threshold: .1;
+$critical-usage-threshold: .01;
+$supported-browsers: ('chrome', 'safari', 'firefox', 'ie');
+$browser-minimum-versions: ('firefox': '33', 'ie': '10');
 
-//$debug-browser-support: true;
-@debug "$graceful-usage-threshold is:" $graceful-usage-threshold;
-@debug "$critical-usage-threshold is:" $critical-usage-threshold;
-@debug "$supported-browsers is:" $supported-browsers;
-@debug "$browser-minimum-versions is:" $browser-minimum-versions;
+// $debug-browser-support: true;
+@debug '$graceful-usage-threshold is:' $graceful-usage-threshold;
+@debug '$critical-usage-threshold is:' $critical-usage-threshold;
+@debug '$supported-browsers is:' $supported-browsers;
+@debug '$browser-minimum-versions is:' $browser-minimum-versions;
 
-$mouseover:.15s;
+$mouseover: .15s;
 
-$font_goth:"YakuHanJP", "游ゴシック", YuGothic, "ヒラギノ角ゴ ProN W3", "Hiragino Kaku Gothic ProN", "メイリオ", Meiryo, sans-serif;
-$font_goth_old:"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ","Meiryo","ＭＳ Ｐゴシック",sans-serif;
-$font_min:"YakuHanJP", "Times New Roman", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "メイリオ", Meiryo, serif;
-$font_min_old:'ヒラギノ明朝 Pro W3','Hiragino Mincho Pro','ＭＳ Ｐ明朝','MS PMincho',serif;
+$font_goth: 'YakuHanJP', '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
+$font_goth_old: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック', sans-serif;
+$font_min: 'YakuHanJP', 'Times New Roman', '游明朝', YuMincho, 'ヒラギノ明朝 ProN W3', 'Hiragino Mincho ProN', 'メイリオ', Meiryo, serif;
+$font_min_old: 'ヒラギノ明朝 Pro W3', 'Hiragino Mincho Pro', 'ＭＳ Ｐ明朝', 'MS PMincho', serif;
