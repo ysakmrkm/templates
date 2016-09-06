@@ -65,12 +65,12 @@ html(lang='ja')
       footer(role='contentinfo', itemscope='itemscope', itemtype='http://schema.org/WPFooter')#footer
         block footer
 
-    script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+    script(src='//ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js')
     script.
       if(!window.jQuery){
-        var sNew = document.createElement("script");
+        var sNew = document.createElement('script');
         sNew.async = true;
-        sNew.src = "js/jquery/jquery.1.9.1.min.js";
+        sNew.src = 'js/jquery/jquery.2.2.0.min.js';
         var s0 = document.getElementsByTagName('script')[0];
         s0.parentNode.insertBefore(sNew, s0);
       }
