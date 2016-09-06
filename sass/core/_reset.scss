@@ -20,28 +20,9 @@
 		font-style:normal;
 	}
 
-	body {
-		font-size:10px;
-		//font-family:"ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ","Meiryo","ＭＳ Ｐゴシック",sans-serif;
-		font-family:$font_goth;
-	}
-
-	* html body {
-		font-size:62.5%;
-	}
-
-	*+html body {
-		font-size:62.5%;
-	}
-
-	/* start \*/
-	html:\66irst-child body {
-		font-size:62.5%;
-	}
-	/* end */
-
-	body:first-of-type {
-		font-size:62.5%;
+	html {
+		font-family: $font_goth;
+		font-size: 10px;
 	}
 
 	h1 , h2 , h3 , h4 , h5 , h6 {
