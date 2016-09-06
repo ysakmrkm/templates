@@ -35,7 +35,7 @@
 }
 
 @mixin layout-container {
-	#container {
+	.l-container {
 		position:relative;
 		min-height:100%;
 
@@ -78,7 +78,7 @@
 }
 
 @mixin layout-footer {
-	#footer {
+	.l-footer {
 		position:absolute;
 		bottom:0;
 		width:100%;
