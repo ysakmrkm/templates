@@ -4,10 +4,6 @@
 		height:100%;
 	}
 
-	html {
-		//-pie-load-path:"http://any.server/path/to/pie-js-files/PIE.htc";
-	}
-
 	body {
 		-webkit-text-size-adjust:100%;
 	}
@@ -54,10 +50,6 @@
 }
 
 @mixin common {
-	//placeholderでやる必要性を検討
-	//%pie {
-	//	@include pie-element(relative);
-	//}
 }
 
 @mixin layout-header {
