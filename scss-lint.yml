@@ -200,6 +200,9 @@ linters:
       - empty-cells
       - cursor
       - list-style
+      - list-style-position
+      - list-style-type
+      - list-style-image
       - vertical-align
       - text-align
       - text-indent
