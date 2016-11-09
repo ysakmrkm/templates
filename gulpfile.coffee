@@ -96,7 +96,7 @@ gulp.task 'sass', ->
       javascript: 'js'
       #environment: 'production'
     )
-    .pipe gulp.dest(destPath+"css")
+    .pipe gulp.dest(basePath+destPath+"css")
     .pipe debug(title: 'end compass:')
     .on('end',
       ()->
@@ -208,7 +208,7 @@ gulp.task 'watch', () ->
           './'
           sourceRoot: '../'+basePath+srcPath+'cs/'
         )
-        .pipe gulp.dest(basePath+'js/')
+        .pipe gulp.dest(basePath+destPath+'js/')
         .pipe gulpif(!common(), remember('coffee'))
         .pipe debug(title: 'end coffee:')
         .on('end',
