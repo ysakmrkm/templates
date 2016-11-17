@@ -76,6 +76,15 @@
 		font-style: normal;
 	}
 
+	button {
+		margin: 0;
+
+		&::-moz-focus-inner {
+			border: 0;
+			padding: 0;
+		}
+	}
+
 	a {
 		text-decoration: none;
 	}
