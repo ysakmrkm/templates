@@ -20,7 +20,6 @@ rename = require('gulp-rename')
 del = require('del')
 gulpif = require('gulp-if')
 uglify = require('gulp-uglify')
-data = require('gulp-data')
 notify = require('gulp-notify')
 browserSync = require('browser-sync').create()
 minimist = require('minimist')
@@ -251,9 +250,6 @@ gulp.task 'watch', () ->
               )
 
             this.emit('end')
-          )
-          .pipe data(() ->
-            return require('./'+basePath+srcPath+'jade/data.json')
           )
           .pipe jade(
             pretty: true

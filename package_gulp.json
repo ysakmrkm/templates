@@ -11,7 +11,6 @@
     "gulp-coffeelint": "^0.6.0",
     "gulp-compass": "^2.1.0",
     "gulp-concat-util": "^0.5.5",
-    "gulp-data": "^1.2.1",
     "gulp-debug": "^2.1.2",
     "gulp-foreach": "^0.1.0",
     "gulp-if": "^2.0.0",
