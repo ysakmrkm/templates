@@ -26,7 +26,7 @@ linters:
     style: silent
 
   DebugStatement:
-    enabled: true
+    enabled: false
 
   DeclarationOrder:
     enabled: true
@@ -335,7 +335,7 @@ linters:
     enabled: true
     identifier_list: base
     additional_identifiers: []
-    excluded_identifiers: []
+    excluded_identifiers: ['text-size-adjust']
 
   ZeroUnit:
     enabled: true
