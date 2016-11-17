@@ -85,6 +85,7 @@ gulp.task 'sass', ->
     .pipe debug(title: 'sass compile:'+files)
     .pipe debug(title: 'start lint:')
     .pipe scsslint('config': 'scss-lint.yml')
+    .pipe scsslint.failReporter()
     .pipe debug(title: 'end lint:')
     .pipe compass(
       config_file : currentPath+'/config.rb'
@@ -196,8 +197,11 @@ gulp.task 'watch', () ->
 
           this.emit('end')
         )
+        .pipe debug(title: 'start lint:')
         .pipe coffeeLint('./coffeelint.json')
         .pipe coffeeLint.reporter('coffeelint-stylish')
+        .pipe coffeeLint.reporter('fail')
+        .pipe debug(title: 'end lint:')
         #.pipe uglify()
         .pipe sourcemaps.init()
         .pipe coffee(
