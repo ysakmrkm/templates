@@ -1,10 +1,18 @@
 @mixin reset {
 	body ,
-	h1 , h2 , h3 , h4 , h5 , h6 ,
+	h1 ,
+	h2 ,
+	h3 ,
+	h4 ,
+	h5 ,
+	h6 ,
 	div ,
 	p ,
-	ul , ol , dl ,
-	form , fieldset ,
+	ul ,
+	ol ,
+	dl ,
+	form ,
+	fieldset ,
 	table ,
 	address ,
 	blockquote ,
@@ -25,7 +33,12 @@
 		font-size: 10px;
 	}
 
-	h1 , h2 , h3 , h4 , h5 , h6 {
+	h1 ,
+	h2 ,
+	h3 ,
+	h4 ,
+	h5 ,
+	h6 {
 		font-size: 1em;
 		font-weight: normal;
 	}
@@ -80,8 +93,8 @@
 		margin: 0;
 
 		&::-moz-focus-inner {
-			border: 0;
 			padding: 0;
+			border: 0;
 		}
 	}
 
@@ -94,16 +107,20 @@
 		vertical-align: bottom;
 	}
 
-	caption , th {
+	caption ,
+	th {
 		text-align: left;
 		font-weight: normal;
 	}
 
-	th , td {
+	th ,
+	td {
 		padding: 0;
 	}
 
-	input , textarea , select {
+	input ,
+	textarea ,
+	select {
 		font-family: inherit;
 		font-size: inherit;
 	}
@@ -142,9 +159,14 @@
 }
 
 @mixin resethtml5 { //HTML5
-	header , footer , article , section , aside ,
+	header ,
+	footer ,
+	article ,
+	section ,
+	aside ,
 	nav ,
-	figure , figcaption {
+	figure ,
+	figcaption {
 		display: block;
 		margin: 0;
 		padding: 0;

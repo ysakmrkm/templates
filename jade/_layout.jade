@@ -3,11 +3,11 @@ block vars
 doctype html
 html(lang='ja')
   head
-    meta(charset="UTF-8")
+    meta(charset='UTF-8')
     title
     meta(name='keywords', content='')
     meta(name='description', content='')
-    meta(name='viewport' content='width=device-width')
+    meta(name='viewport', content='width=device-width')
     meta(property='og:title', content='')
     meta(property='og:type', content='article')
     meta(property='og:url', content!='<?php echo (empty($_SERVER["HTTPS"]) ? "http://" : "https://") . $_SERVER["HTTP_HOST"] . $_SERVER["REQUEST_URI"]; ?>')
@@ -17,9 +17,9 @@ html(lang='ja')
     meta(property='fb:app_id', content='')
     meta(name='twitter:card', content='summary')
     meta(name='twitter:site', content='')
-    meta(name='msapplication-tilecolor' content='')
-    meta(name='msapplication-tileimage' content!='mstile-144x144.png')
-    meta(name='theme-color' content='')
+    meta(name='msapplication-tilecolor', content='')
+    meta(name='msapplication-tileimage', content!='mstile-144x144.png')
+    meta(name='theme-color', content='')
     link(rel='apple-touch-icon', sizes='57x57', href!='apple-touch-icon-57x57.png')
     link(rel='apple-touch-icon', sizes='60x60', href!='apple-touch-icon-60x60.png')
     link(rel='apple-touch-icon', sizes='72x72', href!='apple-touch-icon-72x72.png')
@@ -40,12 +40,12 @@ html(lang='ja')
     meta(name='msapplication-tilecolor', content='')
     meta(name='msapplication-tileimage', content!='mstile-144x144.png')
     meta(name='theme-color', content='')
-    link(rel="shortcut icon", type="image/vnd.microsoft.icon", href!="favicon.ico")
-    link(rel="icon", type="image/vnd.microsoft.icon", href!="favicon.ico")
+    link(rel='shortcut icon', type='image/vnd.microsoft.icon', href!='favicon.ico')
+    link(rel='icon', type='image/vnd.microsoft.icon', href!='favicon.ico')
     <?php if (isset($_SERVER['SCRIPT_URL'])) { ?>
-    link(rel="canonical",href!="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_URL']; ?>")
+    link(rel='canonical', href!='http://<?php echo $_SERVER["HTTP_HOST"].$_SERVER["SCRIPT_URL"]; ?>')
     <?php } else { ?>
-    link(rel="canonical",href!="http://<?php echo $_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']; ?>")
+    link(rel='canonical', href!='http://<?php echo $_SERVER["HTTP_HOST"].$_SERVER["REQUEST_URI"]; ?>')
     <?php } ?>
     block head
 
