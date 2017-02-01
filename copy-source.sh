@@ -8,6 +8,7 @@ else
   `echo mkdir -p ./src`;
   `echo cp -r ${1%/}/jade ./src`;
   `echo cp -r ${1%/}/sass ./src`;
+  `echo cp -r ${1%/}/fonts ./src`;
   `echo cp -r ${1%/}/cs ./src`;
 
   echo "Finish copy source files.";
