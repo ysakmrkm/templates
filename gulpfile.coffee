@@ -53,7 +53,18 @@ csConcatRules = [
   basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
 ]
 
-gulp.task 'sass', ->
+gulp.task 'scsslint', ->
+  baseDir = basePath+srcPath+"sass/"
+
+  gulp.src "#{baseDir}**/*.scss"
+    .pipe debug(title: 'start lint:')
+    .pipe cache('scsslint')
+    .pipe scsslint()
+    .pipe debug(title: 'end lint:')
+    .pipe remember('scsslint')
+    .pipe scsslint.failReporter()
+
+gulp.task 'sass', ['scsslint'], ->
   baseDir = basePath+srcPath+"sass/"
   graph = grapher.parseDir(baseDir)
   files = []
@@ -83,10 +94,6 @@ gulp.task 'sass', ->
       gulp.src files, {base: baseDir}
     )
     .pipe debug(title: 'sass compile:'+files)
-    .pipe debug(title: 'start lint:')
-    .pipe scsslint('config': 'scss-lint.yml')
-    .pipe scsslint.failReporter()
-    .pipe debug(title: 'end lint:')
     .pipe compass(
       config_file : currentPath+'/config.rb'
       project: currentPath+'/'+basePath
@@ -105,6 +112,16 @@ gulp.task 'sass', ->
         console.log 'end splite:'
         browserSync.reload()
     )
+
+gulp.task 'puglint', ->
+  baseDir = basePath+srcPath+"jade/"
+
+  gulp.src "#{baseDir}**/*.jade"
+    .pipe debug(title: 'start lint:')
+    .pipe cache('puglint')
+    .pipe puglint()
+    .pipe debug(title: 'end lint:')
+    .pipe puglint.reporter('fail')
 
 gulp.task 'watch', () ->
   @watching = true
@@ -222,11 +239,8 @@ gulp.task 'watch', () ->
     gulp.start 'coffee'
 
   watch basePath+srcPath+'jade/**/*.jade', (e)->
-    gulp.task 'jade', ()->
+    gulp.task 'jade', ['puglint'], ()->
       path = e.path
-
-      gulp.src path
-        .pipe puglint()
 
       partial = ()->
         return /\/_[^\/]+\.jade/.test(path)
