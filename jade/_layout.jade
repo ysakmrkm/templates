@@ -50,19 +50,19 @@ html(lang='ja')
     block head
 
   body(itemscope='itemscope', itemtype='http://schema.org/WebPage')&attributes({'id': pageId, 'class': pageClass})
-    #container
-      header(role='banner', itemscope='itemscope', itemtype='http://schema.org/WPHeader')#header
+    .l-container
+      header(role='banner', itemscope='itemscope', itemtype='http://schema.org/WPHeader').l-header
         block header
 
-      #content
+      .l-content
         main(role='main')
-          article#main
+          article.l-main
             block main
 
-          aside(role='complementary', itemscope='itemscope', itemtype='http://schema.org/WPSideBar')#sub
+          aside(role='complementary', itemscope='itemscope', itemtype='http://schema.org/WPSideBar').l-sub
             block sub
 
-      footer(role='contentinfo', itemscope='itemscope', itemtype='http://schema.org/WPFooter')#footer
+      footer(role='contentinfo', itemscope='itemscope', itemtype='http://schema.org/WPFooter').l-footer
         block footer
 
     script(src='//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js')
