@@ -46,23 +46,6 @@
 }
 
 @mixin common {
-	@font-face {
-		font-family: 'YakuHanJP';
-		font-style: normal;
-		font-weight: 400;
-		src: url(../fonts/YakuHanJP/YakuHanJP-Regular.woff2) format('woff2'),
-		url(../fonts/YakuHanJP/YakuHanJP-Regular.woff) format('woff'),
-		url(../fonts/YakuHanJP/YakuHanJP-Regular.eot);
-	}
-
-	@font-face {
-		font-family: 'YakuHanJP';
-		font-style: normal;
-		font-weight: 700;
-		src: url(../fonts/YakuHanJP/YakuHanJP-Bold.woff2) format('woff2'),
-		url(../fonts/YakuHanJP/YakuHanJP-Bold.woff) format('woff'),
-		url(../fonts/YakuHanJP/YakuHanJP-Bold.eot);
-	}
 }
 
 @mixin layout-header {

@@ -11,6 +11,24 @@ $browser-minimum-versions: ('firefox': '33', 'ie': '10');
 
 $mouseover: .15s;
 
+@font-face {
+	font-family: 'YakuHanJP';
+	font-style: normal;
+	font-weight: 400;
+	src: url(../src/fonts/YakuHanJP/YakuHanJP-Regular.woff2) format('woff2'),
+	url(../src/fonts/YakuHanJP/YakuHanJP-Regular.woff) format('woff'),
+	url(../src/fonts/YakuHanJP/YakuHanJP-Regular.eot);
+}
+
+@font-face {
+	font-family: 'YakuHanJP';
+	font-style: normal;
+	font-weight: 700;
+	src: url(../src/fonts/YakuHanJP/YakuHanJP-Bold.woff2) format('woff2'),
+	url(../src/fonts/YakuHanJP/YakuHanJP-Bold.woff) format('woff'),
+	url(../src/fonts/YakuHanJP/YakuHanJP-Bold.eot);
+}
+
 $font_goth: 'YakuHanJP', '游ゴシック', YuGothic, 'ヒラギノ角ゴ ProN W3', 'Hiragino Kaku Gothic ProN', 'メイリオ', Meiryo, sans-serif;
 $font_goth_old: 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', 'Meiryo', 'ＭＳ Ｐゴシック', sans-serif;
 $font_min: 'YakuHanJP', 'Times New Roman', '游明朝', YuMincho, 'ヒラギノ明朝 ProN W3', 'Hiragino Mincho ProN', 'メイリオ', Meiryo, serif;
