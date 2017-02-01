@@ -30,6 +30,8 @@ targetFolder = if args.target? and args.target.indexOf('/') is -1 then args.targ
 basePath = if targetFolder? then targetFolder else ''
 srcPath = 'src/'
 destPath = ''
+cssDestDir = 'css'
+viewPath = ''
 currentPath = path.resolve('')
 currentFolder = currentPath.split('/').reverse()[0]
 projectFolder = path.resolve('', '../').split('/').reverse()[0]+'/'+currentFolder
@@ -97,13 +99,13 @@ gulp.task 'sass', ['scsslint'], ->
     .pipe compass(
       config_file : currentPath+'/config.rb'
       project: currentPath+'/'+basePath
-      css : 'css'
+      css : cssDestDir
       sass: srcPath+'sass'
       image: 'img'
       javascript: 'js'
       #environment: 'production'
     )
-    .pipe gulp.dest(basePath+destPath+"css")
+    .pipe gulp.dest(basePath+destPath+cssDestDir)
     .pipe debug(title: 'end compass:')
     .on('end',
       ()->
@@ -275,8 +277,7 @@ gulp.task 'watch', () ->
           .pipe rename(
             extname: '.php'
           )
-          #.pipe gulp.dest(basePath+'views/pc/'+jadeDestPath)
-          .pipe gulp.dest(basePath+jadeDestPath)
+          .pipe gulp.dest(basePath+viewPath+jadeDestPath)
           .pipe debug(title: 'end jade:')
           .pipe gulpif(!partial(), remember('jade'))
           .on('end',
