@@ -4,6 +4,7 @@ compass = require('gulp-compass')
 forEach = require('gulp-foreach')
 grapher = require('sass-graph')
 scsslint = require('gulp-scss-lint')
+stylefmt = require('gulp-stylefmt')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
 concat = require('gulp-concat-util')
@@ -55,11 +56,29 @@ csConcatRules = [
   basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
 ]
 
-gulp.task 'scsslint', ->
+gulp.task 'stylefmt', ->
+  baseDir = basePath+srcPath+"sass/"
+
+  gulp.src "#{baseDir}**/*.scss"
+    .pipe debug(title: 'start stylefmt:')
+    .pipe cache('stylefmt')
+    .pipe stylefmt()
+    .pipe debug(title: 'end stylefmt:')
+    .pipe remember('stylefmt')
+    .pipe gulp.dest(basePath+srcPath+'sass/')
+
+gulp.task 'scsslint', ['stylefmt'], ->
   baseDir = basePath+srcPath+"sass/"
 
   gulp.src "#{baseDir}**/*.scss"
     .pipe debug(title: 'start lint:')
+    .pipe plumber(
+      errorHandler:
+        notify.onError(
+          title: "sass lint error"
+          message: "<%= error %>"
+        )
+    )
     .pipe cache('scsslint')
     .pipe scsslint()
     .pipe debug(title: 'end lint:')
