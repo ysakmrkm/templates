@@ -219,6 +219,7 @@ linters:
       - font-size
       - font-weight
       - font-style
+      - font-feature-settings
       - font-variant
       - font-smoothing
       - letter-spacing
