@@ -4,6 +4,19 @@
   ],
   "rules": {
     "indentation": "tab",
+    "string-quotes": "single",
+    "selector-list-comma-newline-after": "always",
+    "selector-list-comma-space-before": "always",
+    "shorthand-property-no-redundant-values": true,
+    "number-no-trailing-zeros": true,
+    "number-leading-zero": "never",
+    "length-zero-no-unit": true,
+    "color-hex-length": "short",
+    "selector-pseudo-element-colon-notation": "double",
+    "at-rule-empty-line-before": ["always", {
+      except: ["blockless-group", "after-same-name", "first-nested"],
+      ignore: ["after-comment"]
+    }],
     "declaration-block-properties-order": [
       [
         "src",
