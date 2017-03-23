@@ -1,10 +1,13 @@
 path = require('path')
 gulp = require('gulp')
 compass = require('gulp-compass')
+postcss = require('gulp-postcss')
 forEach = require('gulp-foreach')
 grapher = require('sass-graph')
 scsslint = require('gulp-scss-lint')
 stylefmt = require('gulp-stylefmt')
+syntax = require('postcss-scss');
+csssorting = require('postcss-sorting')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
 concat = require('gulp-concat-util')
@@ -24,6 +27,7 @@ uglify = require('gulp-uglify')
 notify = require('gulp-notify')
 browserSync = require('browser-sync').create()
 minimist = require('minimist')
+homeDir = require('os').homedir()
 args = minimist(process.argv.slice(2))
 
 # --target
@@ -56,7 +60,22 @@ csConcatRules = [
   basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
 ]
 
-gulp.task 'stylefmt', ->
+
+gulp.task 'csssort', ->
+  baseDir = basePath+srcPath+"sass/"
+
+  gulp.src "#{baseDir}**/*.scss"
+    .pipe debug(title: 'start csssort:')
+    .pipe cache('csssort')
+    .pipe postcss(
+        [ csssorting(require(homeDir+"/.postcss-sorting.json")) ],
+        { syntax: syntax }
+      )
+    .pipe debug(title: 'end csssort:')
+    .pipe remember('csssort')
+    .pipe gulp.dest(basePath+srcPath+'sass/')
+
+gulp.task 'stylefmt', ['csssort'], ->
   baseDir = basePath+srcPath+"sass/"
 
   gulp.src "#{baseDir}**/*.scss"

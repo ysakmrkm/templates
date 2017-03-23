@@ -39,7 +39,8 @@ linters:
 
   ElsePlacement:
     enabled: true
-    style: same_line # or 'new_line'
+    # style: same_line # or 'new_line'
+    style: 'same_line'
 
   EmptyLineBetweenBlocks:
     enabled: true
@@ -67,10 +68,11 @@ linters:
     enabled: true
 
   IdSelector:
-    enabled: true
+    # enabled: true
+    enabled: false
 
   ImportantRule:
-    enabled: true
+    enabled: false
 
   ImportPath:
     enabled: true
@@ -125,6 +127,8 @@ linters:
       - z-index
       - visibility
       - overflow
+      - overflow-x
+      - overflow-y
       - flex
       - flex-basis
       - flex-direction
@@ -260,7 +264,7 @@ linters:
 
   SelectorFormat:
     enabled: true
-    convention: '^([^_-]+(_|-)?)+$' # or 'strict_BEM', or 'hyphenated_BEM', or 'hyphenated_lowercase', or 'camel_case', or 'snake_case', a regex pattern
+    convention: '^([^_-]+([_-]+)?)+$' # or 'strict_BEM', or 'hyphenated_BEM', or 'hyphenated_lowercase', or 'camel_case', or 'snake_case', a regex pattern
 
   Shorthand:
     enabled: true
