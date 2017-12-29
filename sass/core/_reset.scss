@@ -132,7 +132,28 @@
 	iframe {
 		border: 0;
 	}
+	// デザイン素材での指定値と合わせるフォントサイズ半分へ
+	// フォント最小サイズ 6px に注意
+	@media (max-width: 319px) {
+		html {
+			font-size: 10px;
+		}
+	}
 
+	@media (min-width: 320px) and (max-width: 639px) {
+		html {
+			$vw: (((20 - 10) / (640 - 320)) * 100) + vw;
+			$rem: 0 + 'rem';
+
+			font-size: calc(#{$vw} + #{$rem});
+		}
+	}
+
+	@media (min-width: 640px) {
+		html {
+			font-size: 20px;
+		}
+	}
 	//以下未定義要素
 	//area
 	//base
