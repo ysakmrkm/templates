@@ -1,11 +1,13 @@
 @function margin($margin, $lheight, $base, $unit: 0) {
 	$val: $margin + (floor(((ceil((abs(1 - ($lheight / $base)) / 2) * 1000) / 1000) * $base) * 10) / 10 * -1);
 
-	@if $unit != 0 {
-		$val: $val + px;
+	@if $unit == 1 or $unit == 'px' {
+		$val: $val + 'px';
+	} @else if type-of($unit) == 'string' {
+		$val: $val + $unit;
 	}
 
-	@return $val;
+	@return unquote($val);
 }
 
 @function padding($margin, $lheight, $base, $unit: 0) {
