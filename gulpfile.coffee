@@ -8,6 +8,7 @@ scsslint = require('gulp-scss-lint')
 stylefmt = require('gulp-stylefmt')
 syntax = require('postcss-scss');
 csssorting = require('postcss-sorting')
+cleanCss = require('gulp-clean-css')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
 concat = require('gulp-concat-util')
@@ -169,12 +170,20 @@ gulp.task 'sass', ->
         browserSync.reload()
     )
 
+gulp.task 'cleanCss', ->
+  baseDir = basePath+cssDestDir+"/"
+
+  gulp.src "#{baseDir}**/*first.css"
+    .pipe cleanCss()
+    .pipe gulp.dest(basePath+destPath+cssDestDir)
+
 gulp.task 'cssCompile', (cb)->
   runSequence(
     # 'stylefmt',
     'csssort',
     'scsslint',
     'sass',
+    'cleanCss',
     cb
   )
 
