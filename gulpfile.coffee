@@ -30,6 +30,7 @@ pngquant = require('imagemin-pngquant')
 mozjpeg  = require('imagemin-mozjpeg')
 guetzli  = require('imagemin-guetzli')
 browserSync = require('browser-sync').create()
+runSequence = require('run-sequence')
 minimist = require('minimist')
 homeDir = require('os').homedir()
 args = minimist(process.argv.slice(2))
@@ -90,7 +91,7 @@ gulp.task 'csssort', ->
     .pipe remember('csssort')
     .pipe gulp.dest(basePath+srcPath+'sass/')
 
-gulp.task 'stylefmt', ['csssort'], ->
+gulp.task 'stylefmt', ->
   baseDir = basePath+srcPath+"sass/"
 
   gulp.src "#{baseDir}**/*.scss"
@@ -101,7 +102,7 @@ gulp.task 'stylefmt', ['csssort'], ->
     .pipe remember('stylefmt')
     .pipe gulp.dest(basePath+srcPath+'sass/')
 
-gulp.task 'scsslint', ['stylefmt'], ->
+gulp.task 'scsslint', ->
   baseDir = basePath+srcPath+"sass/"
 
   gulp.src "#{baseDir}**/*.scss"
@@ -119,7 +120,7 @@ gulp.task 'scsslint', ['stylefmt'], ->
     .pipe remember('scsslint')
     .pipe scsslint.failReporter()
 
-gulp.task 'sass', ['scsslint'], ->
+gulp.task 'sass', ->
   baseDir = basePath+srcPath+"sass/"
   graph = grapher.parseDir(baseDir)
   files = []
@@ -168,6 +169,15 @@ gulp.task 'sass', ['scsslint'], ->
         browserSync.reload()
     )
 
+gulp.task 'cssCompile', (cb)->
+  runSequence(
+    # 'stylefmt',
+    'csssort',
+    'scsslint',
+    'sass',
+    cb
+  )
+
 gulp.task 'puglint', ->
   baseDir = basePath+srcPath+"jade/"
 
@@ -184,7 +194,7 @@ gulp.task 'watch', () ->
     coffee: 0
     jade: 0
 
-  gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['sass']
+  gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['cssCompile']
 
   watch [basePath+srcPath+'cs/**/*.coffee', '!'+basePath+srcPath+'cs/*.coffee'], (e)->
     path = e.path
