@@ -25,6 +25,10 @@ del = require('del')
 gulpif = require('gulp-if')
 uglify = require('gulp-uglify')
 notify = require('gulp-notify')
+imagemin = require('gulp-imagemin')
+pngquant = require('imagemin-pngquant')
+mozjpeg  = require('imagemin-mozjpeg')
+guetzli  = require('imagemin-guetzli')
 browserSync = require('browser-sync').create()
 minimist = require('minimist')
 homeDir = require('os').homedir()
@@ -60,6 +64,17 @@ csConcatRules = [
   basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
 ]
 
+gulp.task 'imagemin', ->
+  gulp.src(srcPath+'img/*')
+    .pipe imagemin(
+      [
+        pngquant({ quality: '65-80', speed: 1 }),
+        guetzli({ quality: 75 })
+        imagemin.svgo(),
+        imagemin.gifsicle()
+      ]
+    )
+    .pipe(gulp.dest('img'))
 
 gulp.task 'csssort', ->
   baseDir = basePath+srcPath+"sass/"
