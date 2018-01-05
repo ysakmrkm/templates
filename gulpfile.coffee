@@ -338,6 +338,7 @@ gulp.task 'watch', () ->
         .pipe debug(title: 'end coffee:')
         .on('end',
           ()->
+            del basePath+srcPath+csDestDir+'/*.coffee'
             browserSync.reload()
         )
 
