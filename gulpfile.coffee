@@ -47,6 +47,8 @@ srcPath = 'src/'
 destPath = ''
 cssDestDir = 'css'
 viewPath = ''
+csDestDir = 'cs'
+jsDestDir = 'js'
 currentPath = path.resolve('')
 currentFolder = currentPath.split('/').reverse()[0]
 projectFolder = path.resolve('', '../').split('/').reverse()[0]+'/'+currentFolder
@@ -64,10 +66,10 @@ jadeRef.filters.php = (block) ->
 csCommonFolder = 'core'
 csFolder = 'pages'
 csConcatRules = [
-  [basePath+srcPath+'cs/'+csCommonFolder+'/functions.coffee',
-  basePath+srcPath+'cs/'+csCommonFolder+'/header.coffee',
-  basePath+srcPath+'cs/'+csFolder+'/index.coffee',
-  basePath+srcPath+'cs/'+csCommonFolder+'/footer.coffee']
+  [basePath+srcPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+  basePath+srcPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+  basePath+srcPath+csDestDir+'/'+csFolder+'/index.coffee',
+  basePath+srcPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
 ]
 
 gulp.task 'imagemin', ->
@@ -234,7 +236,7 @@ gulp.task 'watch', () ->
 
   gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['cssCompile']
 
-  watch [basePath+srcPath+'cs/**/*.coffee', '!'+basePath+srcPath+'cs/*.coffee'], (e)->
+  watch [basePath+srcPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+csDestDir+'/*.coffee'], (e)->
     path = e.path
 
     if path?
@@ -293,7 +295,7 @@ gulp.task 'watch', () ->
 
                 return src
           })
-          .pipe gulp.dest(basePath+srcPath+'cs/')
+          .pipe gulp.dest(basePath+srcPath+csDestDir+'/'+csDestPath)
           .pipe debug(title: 'end concat:')
           .on 'finish', ()->
             onEnd()
@@ -329,9 +331,9 @@ gulp.task 'watch', () ->
         )
         .pipe sourcemaps.write(
           './'
-          sourceRoot: '../'+basePath+srcPath+'cs/'
+          sourceRoot: '../'+basePath+srcPath+csDestDir+'/'
         )
-        .pipe gulp.dest(basePath+destPath+'js/')
+        .pipe gulp.dest(basePath+destPath+jsDestDir+'/')
         .pipe gulpif(!common(), remember('coffee'))
         .pipe debug(title: 'end coffee:')
         .on('end',
