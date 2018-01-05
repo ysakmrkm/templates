@@ -49,6 +49,7 @@ cssDestDir = 'css'
 viewPath = ''
 csDestDir = 'cs'
 jsDestDir = 'js'
+mobileDir = 'mobile'
 currentPath = path.resolve('')
 currentFolder = currentPath.split('/').reverse()[0]
 projectFolder = path.resolve('', '../').split('/').reverse()[0]+'/'+currentFolder
@@ -236,12 +237,20 @@ gulp.task 'watch', () ->
 
   gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['cssCompile']
 
-  watch [basePath+srcPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+csDestDir+'/*.coffee'], (e)->
+  watch [basePath+srcPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+csDestDir+'/*.coffee', '!'+basePath+srcPath+csDestDir+'/'+mobileDir+'/*.coffee'], (e)->
     path = e.path
+    isMobile = false
 
     if path?
       folder = path.split('/').reverse()[1]
       target = path.split('/').reverse()[0]
+      mobile = path.split('/').reverse()[2]
+
+    if mobile is mobileDir
+      csDestPath = mobileDir+'/'
+      isMobile = true
+    else
+      csDestPath = ''
 
     common = ()->
       return folder is csCommonFolder
@@ -249,15 +258,26 @@ gulp.task 'watch', () ->
     gulp.task 'concat', (callback)->
       src = []
 
+      if common()
+        # src = csConcatRules
+
+        for key, val of csConcatRules
+          for key2, file of val
+            if isMobile
+              if file.indexOf(mobileDir) isnt -1
+                src.push(val)
+                break
+            else
+              if file.indexOf(mobileDir) is -1
+                src.push(val)
+                break
+      else
       `getSrc://`
       for set, i in csConcatRules
         for file, j in set
           if file.indexOf(target) isnt -1
             src[0] = set
             `break getSrc`
-
-      if common()
-        src = csConcatRules
 
       waitMax   = src.length
       waitCount = 0
@@ -333,7 +353,7 @@ gulp.task 'watch', () ->
           './'
           sourceRoot: '../'+basePath+srcPath+csDestDir+'/'
         )
-        .pipe gulp.dest(basePath+destPath+jsDestDir+'/')
+        .pipe gulp.dest(basePath+destPath+jsDestDir+'/'+csDestPath)
         .pipe gulpif(!common(), remember('coffee'))
         .pipe debug(title: 'end coffee:')
         .on('end',
