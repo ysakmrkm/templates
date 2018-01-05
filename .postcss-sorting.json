@@ -10,20 +10,12 @@
       "type": "at-rule",
       "name": "mixin"
     },
-    "declarations",
-    "rules",
-    {
-      "type": "at-rule",
-      "name": "for"
-    },
-    {
-      "type": "at-rule",
-      "name": "each"
-    },
     {
       "type": "at-rule",
       "name": "keyframes"
-    }
+    },
+    "declarations",
+    "rules"
   ],
   "properties-order": [
     "src",

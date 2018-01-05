@@ -1,6 +1,9 @@
 path = require('path')
 gulp = require('gulp')
-compass = require('gulp-compass')
+sass = require('gulp-sass')
+sassImage = require('gulp-sass-image')
+# compass = require('gulp-compass')
+compassImporter = require('compass-importer')
 postcss = require('gulp-postcss')
 forEach = require('gulp-foreach')
 grapher = require('sass-graph')
@@ -8,6 +11,7 @@ scsslint = require('gulp-scss-lint')
 stylefmt = require('gulp-stylefmt')
 syntax = require('postcss-scss');
 csssorting = require('postcss-sorting')
+autoprefixer = require('gulp-autoprefixer')
 cleanCss = require('gulp-clean-css')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
@@ -106,7 +110,7 @@ gulp.task 'stylefmt', ->
 gulp.task 'scsslint', ->
   baseDir = basePath+srcPath+"sass/"
 
-  gulp.src "#{baseDir}**/*.scss"
+  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
     .pipe debug(title: 'start lint:')
     .pipe plumber(
       errorHandler:
@@ -151,15 +155,29 @@ gulp.task 'sass', ->
       gulp.src files, {base: baseDir}
     )
     .pipe debug(title: 'sass compile:'+files)
-    .pipe compass(
-      config_file : currentPath+'/config.rb'
-      project: currentPath+'/'+basePath
-      css : cssDestDir
-      sass: srcPath+'sass'
-      image: 'img'
-      javascript: 'js'
-      #environment: 'production'
+    .pipe sourcemaps.init()
+    .pipe sass({
+      outputStyle: 'expanded'
+      importer: compassImporter
+    })
+    .pipe(sourcemaps.write({includeContent: false}))
+    .pipe(sourcemaps.init({loadMaps: true}))
+    .pipe autoprefixer({
+      browsers: ['last 2 versions', 'Firefox >= 33', 'ie >= 10']
+    })
+    .pipe sourcemaps.write(
+      './'
+      sourceRoot: '../'+basePath+srcPath+'css/'
     )
+    # .pipe compass(
+    #   config_file : currentPath+'/config.rb'
+    #   project: currentPath+'/'+basePath
+    #   css : cssDestDir
+    #   sass: srcPath+'sass'
+    #   image: 'img'
+    #   javascript: 'js'
+    #   #environment: 'production'
+    # )
     .pipe gulp.dest(basePath+destPath+cssDestDir)
     .pipe debug(title: 'end compass:')
     .on('end',
@@ -169,6 +187,14 @@ gulp.task 'sass', ->
         console.log 'end splite:'
         browserSync.reload()
     )
+
+gulp.task 'sassImage', ->
+  gulp.src basePath+'img/*.*'
+    .pipe sassImage({
+      images_path: 'img/'
+      css_path: 'css/'
+      })
+    .pipe gulp.dest(basePath+srcPath+'sass/')
 
 gulp.task 'cleanCss', ->
   baseDir = basePath+cssDestDir+"/"
@@ -183,6 +209,7 @@ gulp.task 'cssCompile', (cb)->
     'csssort',
     'scsslint',
     'sass',
+    'sassImage',
     'cleanCss',
     cb
   )
@@ -202,6 +229,8 @@ gulp.task 'watch', () ->
   taskCount =
     coffee: 0
     jade: 0
+
+  gulp.watch basePath+"img/*.*", ['sassImage']
 
   gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['cssCompile']
 
