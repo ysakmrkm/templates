@@ -25,6 +25,7 @@ watch = require('gulp-watch')
 jade = require('gulp-jade')
 jadeRef = require('gulp-jade/node_modules/jade')
 puglint = require('gulp-pug-linter')
+htmlmin = require('gulp-htmlmin')
 rename = require('gulp-rename')
 del = require('del')
 gulpif = require('gulp-if')
@@ -94,6 +95,35 @@ gulp.task 'imagemin', ->
     .pipe imagemin()
     .pipe(gulp.dest(basePath+'img'))
 
+gulp.task 'cssmin', ->
+  gulp.src([basePath+srcPath+cssDestDir+'/**/*.css'])
+    # .pipe sourcemaps.init()
+    .pipe cleanCss()
+    # .pipe sourcemaps.write(
+    #   './'
+    #   sourceRoot: '../'+basePath+destPath+cssDestDir
+    # )
+    .pipe gulp.dest(basePath+destPath+cssDestDir)
+
+gulp.task 'jsmin', ->
+  gulp.src([basePath+srcPath+'js/**/*.js'])
+    .pipe uglify()
+    .pipe gulp.dest(basePath+destPath+'js/')
+
+gulp.task 'htmlmin', ->
+  gulp.src([basePath+srcPath+'views/**/*.php'])
+    .pipe htmlmin({'collapseWhitespace': true})
+    .pipe gulp.dest(basePath+destPath+'views/')
+
+gulp.task 'release', (cb)->
+  runSequence(
+    'cssmin'
+    'jsmin'
+    'htmlmin'
+    'imagemin'
+    ()->
+      return true
+  )
 
 gulp.task 'csssort', ->
   baseDir = basePath+srcPath+"sass/"
