@@ -8,6 +8,9 @@ else
   `echo init-config $1`;
   `echo npm-link`;
   `echo copy-source $1`;
+  `echo git init`;
+  `echo git-flow init`;
+  `echo npm start`;
 
   echo "You can start coding.";
 fi
