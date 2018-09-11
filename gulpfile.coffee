@@ -200,6 +200,7 @@ gulp.task 'sass', ->
     .pipe debug(title: 'sass compile:'+files)
     .pipe sourcemaps.init()
     .pipe sass({
+      precision: 10
       outputStyle: 'expanded'
       importer: compassImporter
     })
