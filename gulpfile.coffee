@@ -88,7 +88,7 @@ gulp.task 'imagemin', ->
 gulp.task 'csssort', ->
   baseDir = basePath+srcPath+"sass/"
 
-  gulp.src "#{baseDir}**/*.scss"
+  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
     .pipe debug(title: 'start csssort:')
     .pipe cache('csssort')
     .pipe postcss(
@@ -102,7 +102,7 @@ gulp.task 'csssort', ->
 gulp.task 'stylefmt', ->
   baseDir = basePath+srcPath+"sass/"
 
-  gulp.src "#{baseDir}**/*.scss"
+  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
     .pipe debug(title: 'start stylefmt:')
     .pipe cache('stylefmt')
     .pipe stylefmt()
@@ -133,7 +133,7 @@ gulp.task 'sass', ->
   graph = grapher.parseDir(baseDir)
   files = []
 
-  gulp.src "#{baseDir}**/*.scss"
+  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
     .pipe debug(title: 'start compass:')
     .pipe plumber(
       errorHandler:
@@ -192,8 +192,10 @@ gulp.task 'sass', ->
     )
 
 gulp.task 'sassImage', ->
-  gulp.src basePath+'img/*.*'
+  gulp.src basePath+'img/**/*.*'
     .pipe sassImage({
+      targetFile: '_sass-image.scss'
+      template: 'src/sass/sass-image.mustache'
       images_path: 'img/'
       css_path: 'css/'
       })
