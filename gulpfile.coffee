@@ -74,16 +74,26 @@ csConcatRules = [
 ]
 
 gulp.task 'imagemin', ->
-  gulp.src(srcPath+'img/*')
+  gulp.src([basePath+srcPath+'img/**/*.gif', basePath+srcPath+'img/**/*.png', basePath+srcPath+'img/**/*.svg'])
     .pipe imagemin(
       [
-        pngquant({ quality: '65-80', speed: 1 }),
-        guetzli({ quality: 75 })
+        pngquant({ quality: '80-90', speed: 1}),
         imagemin.svgo(),
-        imagemin.gifsicle()
+        imagemin.gifsicle({optimizationLevel: 3, colors: 190})
       ]
     )
-    .pipe(gulp.dest('img'))
+    .pipe imagemin()
+    .pipe(gulp.dest(basePath+'img'))
+
+  gulp.src([basePath+srcPath+'img/**/*.jpg'])
+    .pipe imagemin(
+      [
+        guetzli({ quality: 90})
+      ]
+    )
+    .pipe imagemin()
+    .pipe(gulp.dest(basePath+'img'))
+
 
 gulp.task 'csssort', ->
   baseDir = basePath+srcPath+"sass/"
