@@ -211,7 +211,7 @@ gulp.task 'sass', ->
     })
     .pipe sourcemaps.write(
       './'
-      sourceRoot: '../'+basePath+srcPath+'css/'
+      sourceRoot: '../'+basePath+srcPath+'sass/'
     )
     # .pipe compass(
     #   config_file : currentPath+'/config.rb'
