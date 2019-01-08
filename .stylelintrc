@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "stylelint-order"
+    "/usr/local/lib/node_modules/stylelint-order",
+    "/usr/local/lib/node_modules/stylelint-selector-bem-pattern"
   ],
   "rules": {
     "indentation": "tab",
@@ -11,17 +12,36 @@
     "number-no-trailing-zeros": true,
     "number-leading-zero": "never",
     "length-zero-no-unit": true,
+    "color-named": "never",
     "color-hex-length": "short",
     "selector-pseudo-element-colon-notation": "double",
     "at-rule-empty-line-before": ["always", {
-      except: ["blockless-group", "first-nested"],
+      except: ["first-nested"],
       ignore: ["after-comment", "inside-block", "blockless-after-same-name-blockless"]
     }],
-    "declaration-block-properties-order": [
+    # "function-calc-no-unspaced-operator": true,
+    "order/order": [
       [
-        "$import",
-        "$variable",
-        "$include",
+        "dollar-variables",
+        {
+          type: "at-rule",
+          name: "include",
+        },
+        {
+          type: "at-rule",
+          name: "extend",
+        },
+        {
+          type: "at-rule",
+          name: "include",
+          hasBlock: true
+        },
+        "declarations",
+        "rules"
+      ]
+    ],
+    "order/properties-order": [
+      [
         "src",
         "content",
         "display",
@@ -134,8 +154,7 @@
         "letter-spacing",
         "white-space",
         "word-spacing",
-        "color",
-        "@atrule"
+        "color"
       ]
     ]
   }
