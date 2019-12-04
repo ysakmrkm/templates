@@ -5,14 +5,30 @@ if [ $# -eq 0 ]; then
 
   exit 1
 else
-  `echo ln -fs ${1%/}/.editorconfig ~/.editorconfig`;
-  `echo ln -fs ${1%/}/.pug-lintrc ./.pug-lintrc`;
-  `echo ln -fs ${1%/}/coffeelint.json ./coffeelint.json`;
-  `echo ln -fs ${1%/}/.stylelintrc ~/.stylelintrc`;
-  `echo ln -fs ${1%/}/.scss-lint.yml ~/.scss-lint.yml`;
-  `echo ln -fs ${1%/}/package_gulp.json ./package.json`;
-  `echo cp -f ${1%/}/config.rb ./config.rb`;
-  `echo cp -f ${1%/}/gulpfile.coffee ./gulpfile.coffee`;
+  shopt -s dotglob
+
+  files=`find ${1%/}/conf/ln -maxdepth 1 -type f`
+
+  for filepath in $files; do
+    `echo ln -fs $filepath ./`;
+  done
+
+  files="${1%/}/conf/ln/usr/*"
+
+  for filepath in $files; do
+    `echo ln -fs $filepath ~/`;
+  done
+
+  files="${1%/}/conf/ln/project/*"
+
+  for filepath in $files; do
+    `echo ln -fs $filepath ./`;
+  done
+
+  shopt -u dotglob
+
+  `echo cp -r ${1%/}/conf/cp/. ./`;
 
   echo "Finish config files copy.";
+
 fi
