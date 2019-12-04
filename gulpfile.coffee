@@ -43,116 +43,254 @@ args = minimist(process.argv.slice(2))
 targetFolder = if args.target? and args.target.indexOf('/') is -1 then args.target+'/' else args.target
 basePath = if targetFolder? then targetFolder else ''
 srcPath = 'src/'
-destPath = ''
 cssDestDir = 'css'
-viewPath = ''
+viewPath = 'views/'
 csDestDir = 'cs'
 jsDestDir = 'js'
-mobileDir = 'mobile'
+pcDir = 'pc'
+mobileDir = 'sp'
+targetDir = if args.mode? and args.mode is 'pc' then pcDir else ''
+targetDir = if targetDir is '' and args.mode is 'sp' then mobileDir else targetDir
+targetPath = if targetDir is '' then '' else targetDir+'/'
+destPath = if targetDir is 'pc' then '' else 'm/'
 currentPath = path.resolve('')
 currentFolder = currentPath.split('/').reverse()[0]
 projectFolder = path.resolve('', '../').split('/').reverse()[0]+'/'+currentFolder
 gulp.watching = false
 
-gulp.task 'webserver',() ->
+gulp.task 'webserver', (done)->
   browserSync.init(
     proxy: if targetFolder? then 'localhost/'+currentFolder+'/'+targetFolder else 'localhost/'+currentFolder+'/'
     notify: false
   )
+
+  done()
 
 jadeRef.filters.php = (block) ->
   return "\n<?php\n"+block+"\n?>"
 
 csCommonFolder = 'core'
 csFolder = 'pages'
-csConcatRules = [
-  [basePath+srcPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-  basePath+srcPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-  basePath+srcPath+csDestDir+'/'+csFolder+'/index.coffee',
-  basePath+srcPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-]
 
-gulp.task 'imagemin', ->
-  gulp.src([basePath+srcPath+'img/**/*.gif', basePath+srcPath+'img/**/*.png', basePath+srcPath+'img/**/*.svg'])
+if args.mode is 'sp'
+  csConcatRules = [
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/index.coffee' ]
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fluxSlide.coffee',]
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/menu.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/accordion.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/anchor.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/read-more.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/toc.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/rate.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/contents.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/qa.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/error.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fixed-cv.coffee']
+  ]
+else if args.mode is 'pc'
+  csConcatRules = [
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/about.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/case.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/contents.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/members.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/smooth-scroll.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fixed-contents.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/rate.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/qa.coffee',
+    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/toc.coffee']
+    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/error.coffee']
+  ]
+
+gulp.task 'imagenextgen', ()->
+  # webp
+  webpConf = {
+    quality: 99
+    method: 6
+    nearLossless: 20
+  }
+
+  if targetDir is mobileDir
+    webpConf.quality = 85
+    webpConf.nearLossless = false
+
+  gulp.src([
+    basePath+srcPath+targetPath+'img/**/*.jpg',
+    basePath+srcPath+targetPath+'img/**/*.gif',
+    basePath+srcPath+targetPath+'img/**/*.png',
+    '!'+basePath+srcPath+targetPath+'img/**/*-s+([a-z0-9]).png'
+    ], {
+      since: gulp.lastRun(imagenextgen)
+    })
+    .pipe diff({
+      clear: true
+      hash: 'webp'
+    })
+    .pipe changed(basePath+targetPath+destPath+'img', {extension: '.webp'})
     .pipe imagemin(
       [
-        pngquant({ quality: '80-90', speed: 1}),
-        imagemin.svgo(),
+        webp(webpConf)
+      ],
+      {verbose: true}
+    )
+    .pipe rename(
+      extname: '.webp'
+    )
+    .pipe(gulp.dest(basePath+targetPath+destPath+'img'))
+    .on('end',
+      ()->
+        console.log 'finish compress webp'
+    )
+
+  # jpeg 2000
+  gulp.src([
+    basePath+srcPath+targetPath+'img/**/*.jpg',
+    basePath+srcPath+targetPath+'img/**/*.gif',
+    basePath+srcPath+targetPath+'img/**/*.png',
+    '!'+basePath+srcPath+targetPath+'img/**/*-s+([a-z0-9]).png'
+    ], {
+      since: gulp.lastRun(imagenextgen)
+    })
+    .pipe diff({
+      clear: true
+      hash: 'jpeg2000'
+    })
+    .pipe changed(basePath+targetPath+destPath+'img', {extension: '.jp2'})
+    .pipe jp2({ quality: 100})
+    .pipe rename(
+      extname: '.jp2'
+    )
+    .pipe(gulp.dest(basePath+targetPath+destPath+'img'))
+    .on('end',
+      ()->
+        console.log 'finish compress jpeg2000'
+    )
+
+  # jpeg xr
+  gulp.src([
+    basePath+srcPath+targetPath+'img/**/*.jpg',
+    basePath+srcPath+targetPath+'img/**/*.gif',
+    basePath+srcPath+targetPath+'img/**/*.png',
+    '!'+basePath+srcPath+targetPath+'img/**/*-s+([a-z0-9]).png'
+    ], {
+      since: gulp.lastRun(imagenextgen)
+    })
+    .pipe diff({
+      clear: true
+      hash: 'jxr'
+    })
+    .pipe changed(basePath+targetPath+destPath+'img', {extension: '.jxr'})
+    .pipe jxr(['-truecolours', '-tile', '32'])
+    .pipe rename(
+      extname: '.jxr'
+    )
+    .pipe(gulp.dest(basePath+targetPath+destPath+'img'))
+    .on('end',
+      ()->
+        console.log 'finish compress jpeg xr'
+    )
+
+gulp.task 'imagemin', ()->
+  gulp.src([
+    basePath+srcPath+'img/**/*.gif', basePath+srcPath+'img/**/*.png', basePath+srcPath+'img/**/*.svg', '!'+basePath+srcPath+'img/**/*-s+([a-z0-9]).png'
+    ], {
+      since: gulp.lastRun(imagemin)
+    })
+    .pipe diff({
+      clear: true
+      hash: 'img'
+    })
+    .pipe changed(basePath+'img')
+    # .pipe cache('imagemin1')
+    .pipe imagemin(
+      [
+        pngquant({ quality: [.9, 1], speed: 1}),
+        svgo({
+          plugins: [
+            {removeViewBox: false}
+          ]
+        }),
         imagemin.gifsicle({optimizationLevel: 3, colors: 190})
+      ],
+      {verbose: true}
+    )
+    .pipe imagemin(
+      [
+        svgo({
+          plugins: [
+            {removeViewBox: false}
+          ]
+        })
       ]
     )
-    .pipe imagemin()
     .pipe(gulp.dest(basePath+'img'))
+    .on('end',
+      ()->
+        console.log 'finish compress (gif|png|svg|png)'
+    )
 
-  gulp.src([basePath+srcPath+'img/**/*.jpg'])
+  gulp.src([
+    basePath+srcPath+'img/**/*.jpg'
+    ], {
+      since: gulp.lastRun(imagemin)
+    })
+    .pipe diff({
+      clear: true
+      hash: 'jpg'
+    })
+    .pipe changed(basePath+'img')
+    # .pipe cache('imagemin2')
     .pipe imagemin(
       [
         guetzli({ quality: 90})
-      ]
+      ],
+      {verbose: true}
     )
     .pipe imagemin()
     .pipe(gulp.dest(basePath+'img'))
+    .on('end',
+      ()->
+        console.log 'finish compress jpg'
+    )
 
-gulp.task 'cssmin', ->
-  gulp.src([basePath+srcPath+cssDestDir+'/**/*.css'])
+gulp.task 'cssmin', gulp.series ->
+  gulp.src([basePath+cssDestDir+'/'+targetPath+'**/*.css'])
     # .pipe sourcemaps.init()
-    .pipe cleanCss()
+    .pipe cleanCss({rebase: false})
     # .pipe sourcemaps.write(
     #   './'
     #   sourceRoot: '../'+basePath+destPath+cssDestDir
     # )
-    .pipe gulp.dest(basePath+destPath+cssDestDir)
+    .pipe gulp.dest(basePath+destPath+targetPath+cssDestDir)
 
-gulp.task 'jsmin', ->
-  gulp.src([basePath+srcPath+'js/**/*.js'])
+gulp.task 'jsmin', gulp.series ->
+  gulp.src([basePath+'js/'+targetPath+'**/*.js'])
     .pipe uglify()
-    .pipe gulp.dest(basePath+destPath+'js/')
+    .pipe gulp.dest(basePath+destPath+targetPath+'js')
 
-gulp.task 'htmlmin', ->
-  gulp.src([basePath+srcPath+'views/**/*.php'])
+gulp.task 'htmlmin', gulp.series ->
+  gulp.src([basePath+'views/'+targetPath+'**/*.php'])
     .pipe htmlmin({'collapseWhitespace': true})
-    .pipe gulp.dest(basePath+destPath+'views/')
+    .pipe gulp.dest(basePath+'views/'+targetPath)
 
-gulp.task 'release', (cb)->
-  runSequence(
-    'cssmin'
-    'jsmin'
-    'htmlmin'
-    'imagemin'
-    ()->
-      return true
-  )
+gulp.task 'release', gulp.parallel('cssmin', 'jsmin', 'htmlmin', 'imagemin')
 
-gulp.task 'csssort', ->
-  baseDir = basePath+srcPath+"sass/"
-
-  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
-    .pipe debug(title: 'start csssort:')
-    .pipe cache('csssort')
-    .pipe postcss(
-        [ csssorting(require(homeDir+"/.postcss-sorting.json")) ],
-        { syntax: syntax }
-      )
-    .pipe debug(title: 'end csssort:')
-    .pipe remember('csssort')
-    .pipe gulp.dest(basePath+srcPath+'sass/')
-
-gulp.task 'stylefmt', ->
-  baseDir = basePath+srcPath+"sass/"
-
-  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
-    .pipe debug(title: 'start stylefmt:')
-    .pipe cache('stylefmt')
-    .pipe stylefmt()
-    .pipe debug(title: 'end stylefmt:')
-    .pipe remember('stylefmt')
-    .pipe gulp.dest(basePath+srcPath+'sass/')
-
-gulp.task 'scsslint', ->
-  baseDir = basePath+srcPath+"sass/"
-
-  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
-    .pipe debug(title: 'start lint:')
+gulp.task 'scsslint', gulp.series ->
+  gulp.src basePath+srcPath+'**/sass/**/*.scss'
     .pipe plumber(
       errorHandler:
         notify.onError(
@@ -161,18 +299,21 @@ gulp.task 'scsslint', ->
         )
     )
     .pipe cache('scsslint')
-    .pipe scsslint()
+    .pipe debug(title: 'start lint:')
+    .pipe scsslint(
+      reporters: [
+        {formatter: 'string', console: true}
+      ]
+      fix: true
+    )
     .pipe debug(title: 'end lint:')
+    # .pipe gulp.dest(basePath+srcPath+'sass/')
+    .pipe gulp.dest(basePath+srcPath)
     .pipe remember('scsslint')
-    .pipe scsslint.failReporter()
 
-gulp.task 'sass', ->
-  baseDir = basePath+srcPath+"sass/"
-  graph = grapher.parseDir(baseDir)
-  files = []
-
-  gulp.src ["#{baseDir}**/*.scss", "!#{baseDir}**/_sass-image.scss"]
-    .pipe debug(title: 'start compass:')
+gulp.task 'sass', ()->
+  gulp.src [ basePath+srcPath+"#{targetPath}sass/**/*.scss", "!"+basePath+srcPath+"#{targetPath}sass/**/_*.scss" ]
+    .pipe debug(title: 'start sass:')
     .pipe plumber(
       errorHandler:
         notify.onError(
@@ -180,123 +321,147 @@ gulp.task 'sass', ->
           message: "<%= error %>"
         )
 
-      this.emit('end')
+      # this.emit('end')
     )
-    .pipe cache('sass')
-    .pipe gulpif(@watching, forEach (currentStream, file) ->
-      files = [file.path]
-
-      addParent = (childPath)->
-        graph.visitAncestors childPath, (parent) ->
-          files.push(parent)
-          addParent(parent)
-
-      addParent(file.path)
-
-      gulp.src files, {base: baseDir}
-    )
-    .pipe debug(title: 'sass compile:'+files)
     .pipe sourcemaps.init()
+    .pipe sassImage()
     .pipe sass({
       precision: 10
       outputStyle: 'expanded'
       importer: compassImporter
     })
-    .pipe(sourcemaps.write({includeContent: false}))
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe autoprefixer({
-      browsers: ['last 2 versions', 'Firefox >= 33', 'ie >= 10']
-    })
+    .pipe sassImage()
+    .pipe autoprefixer()
     .pipe sourcemaps.write(
-      './'
-      sourceRoot: '../'+basePath+srcPath+'sass/'
+      ''
+      includeContent: false
+      sourceRoot: "../../src/#{targetPath}sass/"
     )
-    # .pipe compass(
-    #   config_file : currentPath+'/config.rb'
-    #   project: currentPath+'/'+basePath
-    #   css : cssDestDir
-    #   sass: srcPath+'sass'
-    #   image: 'img'
-    #   javascript: 'js'
-    #   #environment: 'production'
-    # )
-    .pipe gulp.dest(basePath+destPath+cssDestDir)
-    .pipe debug(title: 'end compass:')
-    .on('end',
-      ()->
-        console.log 'start splite:'
-        del basePath+'img/**/*-s+([a-z0-9]).png'
-        console.log 'end splite:'
-        browserSync.reload()
-    )
+    .pipe debug(title: 'end sass:')
+    # .pipe remember('sass')
+    .pipe replace('src/', '')
+    .pipe gulp.dest(basePath+cssDestDir+"/#{targetPath}")
+    .pipe browserSync.stream()
 
-gulp.task 'sassImage', ->
-  gulp.src basePath+'img/**/*.*'
-    .pipe sassImage({
-      targetFile: '_sass-image.scss'
-      template: 'src/sass/sass-image.mustache'
-      images_path: 'img/'
-      css_path: 'css/'
-      })
-    .pipe gulp.dest(basePath+srcPath+'sass/')
-
-gulp.task 'cleanCss', ->
+gulp.task 'cleanCss', gulp.series ->
   baseDir = basePath+cssDestDir+"/"
 
   gulp.src "#{baseDir}**/*first.css"
     .pipe cleanCss()
     .pipe gulp.dest(basePath+destPath+cssDestDir)
 
-gulp.task 'cssCompile', (cb)->
-  runSequence(
-    # 'stylefmt',
-    'csssort',
-    'scsslint',
-    'sass',
-    'sassImage',
-    'cleanCss',
-    cb
-  )
+gulp.task 'cssCompile', gulp.series('scsslint', 'sass')
 
-gulp.task 'puglint', ->
-  baseDir = basePath+srcPath+"jade/"
+gulp.task 'puglint', ()->
+  baseDir = basePath+srcPath+targetPath+'jade/**/*.jade'
 
   gulp.src "#{baseDir}**/*.jade"
     .pipe debug(title: 'start lint:')
     .pipe cache('puglint')
-    .pipe puglint()
+    .pipe puglint({failAfterError: true})
     .pipe debug(title: 'end lint:')
-    .pipe puglint.reporter('fail')
 
-gulp.task 'watch', () ->
-  @watching = true
-  taskCount =
-    coffee: 0
-    jade: 0
+gulp.task 'jade', ()->
+  gulp.src basePath+srcPath+targetPath+'jade/**/*.jade'
+    .pipe watch basePath+srcPath+targetPath+'jade/**/*.jade', (e)->
+      path = e.path
 
-  gulp.watch basePath+"img/*.*", ['sassImage']
+      partial = ()->
+        return /\/_[^\/]+\.jade/.test(path)
 
-  gulp.watch basePath+srcPath+"**/sass/**/*.scss", ['cssCompile']
+      if path?
+        if partial()
+          console.log(path)
+          jadeDestPath = path.split(basePath+srcPath)[1].split('/')
+          console.log(jadeDestPath)
+          jadeDestPath.pop()
+          console.log(jadeDestPath)
+          jadeDestPath = jadeDestPath.join('/')+'/'
+          jadeDestPath = jadeDestPath.replace('jade/', '')
+          console.log(jadeDestPath)
 
-  watch [basePath+srcPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+csDestDir+'/*.coffee', '!'+basePath+srcPath+csDestDir+'/'+mobileDir+'/*.coffee'], (e)->
-    path = e.path
-    isMobile = false
+          path = [basePath+srcPath+targetPath+'jade/**/*.jade', '!'+basePath+srcPath+targetPath+'jade/**/mixin.jade', '!'+basePath+srcPath+targetPath+'jade/components/**/*.jade', '!'+basePath+srcPath+targetPath+'jade/**/_*.jade']
+          #
+          # jadeDestPath = ''
+        else
+          console.log(path)
+          jadeDestPath = path.split(basePath+srcPath)[1].split('/')
+          console.log(jadeDestPath)
+          jadeDestPath.pop()
+          console.log(jadeDestPath)
+          jadeDestPath = jadeDestPath.join('/')+'/'
+          jadeDestPath = jadeDestPath.replace('jade/', '')
+          console.log(jadeDestPath)
 
-    if path?
-      folder = path.split('/').reverse()[1]
-      target = path.split('/').reverse()[0]
-      mobile = path.split('/').reverse()[2]
+          if jadeDestPath.indexOf('.') isnt -1 or jadeDestPath is '/'
+            jadeDestPath = ''
 
-    if mobile is mobileDir
-      csDestPath = mobileDir+'/'
-      isMobile = true
-    else
-      csDestPath = ''
+        gulp.src path
+          .pipe gulpif(!partial(), cache('jade'))
+          .pipe debug(title: 'start jade:')
+          .pipe plumber(
+            errorHandler:
+              notify.onError(
+                title: "jade compile error"
+                message: "<%= error %>"
+              )
 
-    common = ()->
-      return folder is csCommonFolder
+            # this.emit('end')
+          )
+          .pipe jade(
+            pretty: true
+          )
+          .pipe rename(
+            extname: '.php'
+          )
+          .pipe gulp.dest(basePath+viewPath+jadeDestPath)
+          .pipe debug(title: 'end jade:')
+          .pipe gulpif(!partial(), remember('jade'))
+          .on('end',
+            ()->
+              browserSync.reload()
+          )
 
-    gulp.task 'concat', (callback)->
+# isCommon = (e)->
+#   path = e.path
+#   isMobile = false
+#
+#   if path?
+#     folder = path.split('/').reverse()[1]
+#     target = path.split('/').reverse()[0]
+#     mobile = path.split('/').reverse()[2]
+#
+#   if mobile is mobileDir
+#     csDestPath = mobileDir+'/'
+#     isMobile = true
+#   else
+#     csDestPath = ''
+#
+#   # common = ()->
+#   console.log folder is csCommonFolder
+#   return folder is csCommonFolder
+
+gulp.task 'coffeeConcat', gulp.series ->
+  gulp.src [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee']
+    .pipe watch [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee'], (e)->
+      path = e.path
+      isMobile = false
+
+      if path?
+        folder = path.split('/').reverse()[1]
+        target = path.split('/').reverse()[0]
+        mobile = path.split('/').reverse()[2]
+
+      if mobile is mobileDir
+        csDestPath = mobileDir+'/'
+        isMobile = true
+      else
+        csDestPath = ''
+
+      common = ()->
+        console.log folder is csCommonFolder
+        return folder is csCommonFolder
+
       src = []
 
       if common()
@@ -313,19 +478,19 @@ gulp.task 'watch', () ->
                 src.push(val)
                 break
       else
-      `getSrc://`
-      for set, i in csConcatRules
-        for file, j in set
-          if file.indexOf(target) isnt -1
-            src[0] = set
-            `break getSrc`
+        `getSrc://`
+        for set, i in csConcatRules
+          for file, j in set
+            if file.indexOf(target) isnt -1
+              src[0] = set
+              `break getSrc`
 
       waitMax   = src.length
       waitCount = 0
 
-      onEnd = ()->
-        if waitMax is ++waitCount
-          callback()
+      # onEnd = ()->
+      #   if waitMax is ++waitCount
+      #     callback()
 
       for key, val of src
         if common()
@@ -342,7 +507,7 @@ gulp.task 'watch', () ->
                 message: "<%= error %>"
               )
 
-            this.emit('end')
+            # this.emit('end')
           )
           .pipe concat(target, {
             process:
@@ -356,12 +521,31 @@ gulp.task 'watch', () ->
 
                 return src
           })
-          .pipe gulp.dest(basePath+srcPath+csDestDir+'/'+csDestPath)
+          .pipe gulp.dest(basePath+srcPath+targetPath+csDestDir+'/'+csDestPath)
           .pipe debug(title: 'end concat:')
-          .on 'finish', ()->
-            onEnd()
+          # .on 'finish', ()->
+          #   onEnd()
 
-    gulp.task 'coffee', ['concat'], ()->
+gulp.task 'coffee', gulp.series ->
+  gulp.src basePath+srcPath+targetPath+csDestDir+'/*.coffee'
+    .pipe watch basePath+srcPath+targetPath+csDestDir+'/*.coffee', (e)->
+      path = e.path
+      isMobile = false
+
+      if path?
+        folder = path.split('/').reverse()[1]
+        target = path.split('/').reverse()[0]
+        mobile = path.split('/').reverse()[2]
+
+      if mobile is mobileDir
+        csDestPath = mobileDir+'/'
+        isMobile = true
+      else
+        csDestPath = ''
+
+      common = ()->
+        return folder is csCommonFolder
+
       if common()
         regexp = new RegExp(csCommonFolder+'.*$')
         path = path.replace(regexp, '*.coffee')
@@ -378,7 +562,7 @@ gulp.task 'watch', () ->
               message: "<%= error %>"
             )
 
-          this.emit('end')
+          # this.emit('end')
         )
         .pipe debug(title: 'start lint:')
         .pipe coffeeLint('./coffeelint.json')
@@ -392,9 +576,10 @@ gulp.task 'watch', () ->
         )
         .pipe sourcemaps.write(
           './'
-          sourceRoot: '../'+basePath+srcPath+csDestDir+'/'
+          sourceRoot: '../../'+basePath+srcPath+targetPath+csDestDir+'/'
         )
-        .pipe gulp.dest(basePath+destPath+jsDestDir+'/'+csDestPath)
+        # .pipe gulp.dest(basePath+destPath+jsDestDir+'/'+targetPath+csDestPath)
+        .pipe gulp.dest(basePath+jsDestDir+'/'+targetPath)
         .pipe gulpif(!common(), remember('coffee'))
         .pipe debug(title: 'end coffee:')
         .on('end',
@@ -403,53 +588,17 @@ gulp.task 'watch', () ->
             browserSync.reload()
         )
 
-    gulp.start 'coffee'
+gulp.task 'coffeeCompile', gulp.series gulp.parallel('coffeeConcat', 'coffee')
 
-  watch basePath+srcPath+'jade/**/*.jade', (e)->
-    gulp.task 'jade', ['puglint'], ()->
-      path = e.path
+gulp.task 'watch', (done)->
+  gulp.watch [basePath+srcPath+'img/**/*.(gif|png|svg|jpg)', '!'+basePath+srcPath+'img/**/*-s+([a-z0-9]).png'], gulp.task('imagemin')
 
-      partial = ()->
-        return /\/_[^\/]+\.jade/.test(path)
+  gulp.watch basePath+srcPath+"**/sass/**/*.scss", gulp.task('sass')
 
-      if path?
-        if partial()
-          path = [basePath+srcPath+'jade/**/*.jade', '!'+basePath+srcPath+'jade/**/mixin.jade', '!'+basePath+srcPath+'jade/components/**/*.jade', '!'+basePath+srcPath+'jade/**/_*.jade']
-          jadeDestPath = ''
-        else
-          jadeDestPath = path.split(basePath+srcPath+'jade/')[1].split('/')
-          jadeDestPath.pop()
-          jadeDestPath = jadeDestPath.join('/')+'/'
+  gulp.watch [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee'], gulp.task('coffeeCompile')
 
-          if jadeDestPath.indexOf('.') isnt -1 or jadeDestPath is '/'
-            jadeDestPath = ''
+  gulp.watch basePath+srcPath+'**/jade/**/*.jade', gulp.series('puglint', 'jade')
 
-        gulp.src path
-          .pipe gulpif(!partial(), cache('jade'))
-          .pipe debug(title: 'start jade:')
-          .pipe plumber(
-            errorHandler:
-              notify.onError(
-                title: "jade compile error"
-                message: "<%= error %>"
-              )
+  done()
 
-            this.emit('end')
-          )
-          .pipe jade(
-            pretty: true
-          )
-          .pipe rename(
-            extname: '.php'
-          )
-          .pipe gulp.dest(basePath+viewPath+jadeDestPath)
-          .pipe debug(title: 'end jade:')
-          .pipe gulpif(!partial(), remember('jade'))
-          .on('end',
-            ()->
-              browserSync.reload()
-          )
-
-    gulp.start 'jade'
-
-gulp.task 'default', ['webserver', 'watch']
+gulp.task 'default', gulp.parallel('webserver', 'watch')
