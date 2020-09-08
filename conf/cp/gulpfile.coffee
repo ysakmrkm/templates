@@ -1,7 +1,7 @@
 path = require('path')
 gulp = require('gulp')
 sass = require('gulp-sass')
-sassImage = require('gulp-css-image-dimensions')
+sassAssetFunctions = require('node-sass-asset-functions')
 compassImporter = require('compass-importer')
 scsslint = require('gulp-stylelint')
 autoprefixer = require('gulp-autoprefixer')
@@ -325,13 +325,14 @@ gulp.task 'sass', ()->
       # this.emit('end')
     )
     .pipe sourcemaps.init()
-    .pipe sassImage()
     .pipe sass({
       precision: 10
       outputStyle: 'expanded'
       importer: compassImporter
+      functions: sassAssetFunctions({
+        images_path: basePath+destPath+'/img'
+      })
     })
-    .pipe sassImage()
     .pipe autoprefixer()
     .pipe sourcemaps.write(
       ''
