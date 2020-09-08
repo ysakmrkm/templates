@@ -1,0 +1,12 @@
+@import 'fundation/_property';
+@import 'fundation/_reset';
+@import 'compass/css3';
+@import 'compass/reset/utilities';
+
+@include reset;
+//compass
+@include reset-html5;
+//オリジナル
+@include resethtml5;
+
+@import 'fundation/_base';

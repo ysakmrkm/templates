@@ -12,11 +12,11 @@
 		& ,
 		&::before ,
 		&::after {
-			@include transition(background-color $mouseover linear, background-image $mouseover linear);
+			transition: background-color $mouseover linear, background-image $mouseover linear;
 		}
 
 		> * {
-			@include transition(opacity $mouseover linear);
+			transition: opacity $mouseover linear;
 		}
 
 		img {
@@ -27,7 +27,7 @@
 			text-decoration: underline;
 
 			> * {
-				@include opacity(0);
+				opacity: 0;
 				text-decoration: none;
 			}
 		}
