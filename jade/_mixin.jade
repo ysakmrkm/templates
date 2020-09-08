@@ -16,12 +16,11 @@ mixin picture(filename, alt, [pc_width=1, pc_height=1], [sp_width=1, sp_height=1
     - spAttributes = {'data-aspectratio': sp_width+'/'+sp_height}
 
   picture
+    source(media='(max-width: 750px)', data-srcset='#{url}img/sp/#{spimage.replace(/(gif|jpg|jpeg|png)/, "webp")}', type='image/webp')&attributes(spAttributes)
     source(media='(max-width: 750px)', data-srcset='#{url}img/sp/#{spimage}')&attributes(spAttributes)
     source(media='(min-width: 751px)', data-srcset='#{url}img/pc/#{pcimage.replace(/(gif|jpg|jpeg|png)/, "webp")}', type='image/webp')&attributes(pcAttributes)
-    source(media='(min-width: 751px)', data-srcset='#{url}img/pc/#{pcimage.replace(/(gif|jpg|jpeg|png)/, "jp2")}', type='image/jp2')&attributes(pcAttributes)
-    source(media='(min-width: 751px)', data-srcset='#{url}img/pc/#{pcimage.replace(/(gif|jpg|jpeg|png)/, "jxr")}', type='image/jxr')&attributes(pcAttributes)
     source(media='(min-width: 751px)', data-srcset='#{url}img/pc/#{pcimage}')&attributes(pcAttributes)
-    img(src='#{url}img/blank.gif', data-aspectratio='', alt='#{alt}').lazyload&attributes(pcImgAttributes, {'class': attributes.class})
+    img(src='data:image/gif;base64,R0lGODlhAQABAGAAACH5BAEKAP8ALAAAAAABAAEAAAgEAP8FBAA7', data-aspectratio='', alt='#{alt}').lazyload&attributes(pcImgAttributes, {'class': attributes.class})
 
 mixin each(name)
   != '{{#'
