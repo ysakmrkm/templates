@@ -307,7 +307,9 @@ gulp.task 'sass', ()->
         # http_images_path: '/img'
       })
     })
-    .pipe autoprefixer()
+    # .pipe debug(title: 'start autoprefixer:')
+    # .pipe autoprefixer()
+    # .pipe debug(title: 'end autoprefixer:')
     .pipe sourcemaps.write(
       ''
       includeContent: false
@@ -315,7 +317,15 @@ gulp.task 'sass', ()->
     )
     .pipe debug(title: 'end sass:')
     # .pipe remember('sass')
-    .pipe replace('src/', '')
+    # .pipe replace('src/', '')
+    .pipe gulp.dest(basePath+cssDestDir+"/#{targetPath}")
+    .pipe browserSync.stream()
+
+gulp.task 'autoprefixer', ()->
+  gulp.src [ basePath+basePath+cssDestDir+'/'+targetPath+'**/*.css']
+    .pipe debug(title: 'start autoprefixer:')
+    .pipe autoprefixer()
+    .pipe debug(title: 'end autoprefixer:')
     .pipe gulp.dest(basePath+cssDestDir+"/#{targetPath}")
     .pipe browserSync.stream()
 
@@ -338,32 +348,32 @@ gulp.task 'puglint', ()->
 gulp.task 'jade', ()->
   gulp.src basePath+srcPath+targetPath+'jade/**/[^_]*.jade'
     # .pipe cache('jade')
-          .pipe debug(title: 'start jade:')
-          .pipe plumber(
-            errorHandler:
-              notify.onError(
-                title: "jade compile error"
-                message: "<%= error %>"
-              )
+    .pipe debug(title: 'start jade:')
+    .pipe plumber(
+      errorHandler:
+        notify.onError(
+          title: "jade compile error"
+          message: "<%= error %>"
+        )
 
-            # this.emit('end')
-          )
+      # this.emit('end')
+    )
     .pipe progeny(
       debug: true
     )
-          .pipe jade(
-            pretty: true
-          )
-          .pipe rename(
-            extname: '.php'
-          )
+    .pipe jade(
+      pretty: true
+    )
+    .pipe rename(
+      extname: '.php'
+    )
     .pipe gulp.dest(basePath+viewPath)
-          .pipe debug(title: 'end jade:')
+    .pipe debug(title: 'end jade:')
     # .pipe remember('jade')
-          .on('end',
-            ()->
-              browserSync.reload()
-          )
+    .on('end',
+      ()->
+        browserSync.reload()
+    )
 
 # isCommon = (e)->
 #   path = e.path
@@ -530,7 +540,7 @@ gulp.task 'coffee', ()->
 gulp.task 'watch', (done)->
   gulp.watch [basePath+srcPath+'img/**/*.(gif|png|svg|jpg)', '!'+basePath+srcPath+'img/**/*-s+([a-z0-9]).png'], gulp.parallel('imagenextgen', 'imagemin')
 
-  gulp.watch basePath+srcPath+"**/sass/**/*.scss", gulp.series('scsslint', 'sass')
+  gulp.watch basePath+srcPath+"**/sass/**/*.scss", gulp.series('scsslint', 'sass', 'autoprefixer')
 
   gulp.watch [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee'], gulp.series('coffeeConcat', 'coffee')
 
