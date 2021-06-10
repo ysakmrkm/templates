@@ -5,6 +5,7 @@ sassAssetFunctions = require('node-sass-asset-functions')
 compassImporter = require('compass-importer')
 scsslint = require('gulp-stylelint')
 autoprefixer = require('gulp-autoprefixer')
+progeny = require('gulp-progeny')
 cleanCss = require('gulp-clean-css')
 coffee = require('gulp-coffee')
 coffeeLint = require('gulp-coffeelint')
@@ -281,7 +282,7 @@ gulp.task 'scsslint', ()->
     .pipe remember('scsslint')
 
 gulp.task 'sass', ()->
-  gulp.src [ basePath+srcPath+"#{targetPath}sass/**/*.scss", "!"+basePath+srcPath+"#{targetPath}sass/**/_*.scss" ]
+  gulp.src [ basePath+srcPath+targetPath+"sass/**/*.scss"]
     .pipe debug(title: 'start sass:')
     .pipe plumber(
       errorHandler:
@@ -292,13 +293,17 @@ gulp.task 'sass', ()->
 
       # this.emit('end')
     )
+    .pipe cache('sass')
     .pipe sourcemaps.init()
+    .pipe progeny(
+      debug: true
+    )
     .pipe sass({
       precision: 10
       outputStyle: 'expanded'
       importer: compassImporter
       functions: sassAssetFunctions({
-        images_path: basePath+destPath+'/img'
+        images_path: basePath+srcPath+'/img'
         # http_images_path: '/img'
       })
     })
@@ -331,42 +336,8 @@ gulp.task 'puglint', ()->
     .pipe debug(title: 'end lint:')
 
 gulp.task 'jade', ()->
-  gulp.src basePath+srcPath+targetPath+'jade/**/*.jade'
-    .pipe watch basePath+srcPath+targetPath+'jade/**/*.jade', (e)->
-      path = e.path
-
-      partial = ()->
-        return /\/_[^\/]+\.jade/.test(path)
-
-      if path?
-        if partial()
-          console.log(path)
-          jadeDestPath = path.split(basePath+srcPath)[1].split('/')
-          console.log(jadeDestPath)
-          jadeDestPath.pop()
-          console.log(jadeDestPath)
-          jadeDestPath = jadeDestPath.join('/')+'/'
-          jadeDestPath = jadeDestPath.replace('jade/', '')
-          console.log(jadeDestPath)
-
-          path = [basePath+srcPath+targetPath+'jade/**/*.jade', '!'+basePath+srcPath+targetPath+'jade/**/mixin.jade', '!'+basePath+srcPath+targetPath+'jade/components/**/*.jade', '!'+basePath+srcPath+targetPath+'jade/**/_*.jade']
-          #
-          # jadeDestPath = ''
-        else
-          console.log(path)
-          jadeDestPath = path.split(basePath+srcPath)[1].split('/')
-          console.log(jadeDestPath)
-          jadeDestPath.pop()
-          console.log(jadeDestPath)
-          jadeDestPath = jadeDestPath.join('/')+'/'
-          jadeDestPath = jadeDestPath.replace('jade/', '')
-          console.log(jadeDestPath)
-
-          if jadeDestPath.indexOf('.') isnt -1 or jadeDestPath is '/'
-            jadeDestPath = ''
-
-        gulp.src path
-          .pipe gulpif(!partial(), cache('jade'))
+  gulp.src basePath+srcPath+targetPath+'jade/**/[^_]*.jade'
+    # .pipe cache('jade')
           .pipe debug(title: 'start jade:')
           .pipe plumber(
             errorHandler:
@@ -377,15 +348,18 @@ gulp.task 'jade', ()->
 
             # this.emit('end')
           )
+    .pipe progeny(
+      debug: true
+    )
           .pipe jade(
             pretty: true
           )
           .pipe rename(
             extname: '.php'
           )
-          .pipe gulp.dest(basePath+viewPath+jadeDestPath)
+    .pipe gulp.dest(basePath+viewPath)
           .pipe debug(title: 'end jade:')
-          .pipe gulpif(!partial(), remember('jade'))
+    # .pipe remember('jade')
           .on('end',
             ()->
               browserSync.reload()
