@@ -1,5 +1,6 @@
 //変数インクルード
-@import 'core';
+@import 'fundation/property';
+@import 'fundation/layout';
 @import 'compass/reset/utilities';
 @import 'compass/css3/transition';
 @import 'compass/css3/opacity';
@@ -44,13 +45,6 @@ Created By		Yoshiaki Murakami
 /*----------------------------------------------------------------------
 2.	ブラウザデフォルトスタイルリセット
 ----------------------------------------------------------------------*/
-@include reset;
-//compass
-@include reset-html5;
-//オリジナル
-@include resethtml5;
-
-
 /*----------------------------------------------------------------------
 3.	HTMLタグ
 ----------------------------------------------------------------------*/
