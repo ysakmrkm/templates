@@ -73,49 +73,17 @@ jadeRef.filters.php = (block) ->
 csCommonFolder = 'core'
 csFolder = 'pages'
 
-if args.mode is 'sp'
-  csConcatRules = [
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/index.coffee' ]
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fluxSlide.coffee',]
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/menu.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/accordion.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/anchor.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/read-more.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/toc.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/rate.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/contents.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/qa.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/error.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fixed-cv.coffee']
-  ]
-else if args.mode is 'pc'
-  csConcatRules = [
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/about.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/case.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/contents.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/members.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/smooth-scroll.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/fixed-contents.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/rate.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/qa.coffee',
-    basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/toc.coffee']
-    [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/error.coffee']
-  ]
+csConcatRules = [
+  [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/index.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+  [ basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/functions.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/header.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/about.coffee',
+  basePath+srcPath+targetPath+csDestDir+'/'+csCommonFolder+'/footer.coffee']
+  [ basePath+srcPath+targetPath+csDestDir+'/'+csFolder+'/function.coffee' ]
+]
 
 gulp.task 'imagenextgen', ()->
   # webp
@@ -331,6 +299,7 @@ gulp.task 'sass', ()->
       importer: compassImporter
       functions: sassAssetFunctions({
         images_path: basePath+destPath+'/img'
+        # http_images_path: '/img'
       })
     })
     .pipe autoprefixer()
@@ -441,7 +410,7 @@ gulp.task 'jade', ()->
 #   console.log folder is csCommonFolder
 #   return folder is csCommonFolder
 
-gulp.task 'coffeeConcat', ()->
+gulp.task 'coffeeConcat', (done)->
   gulp.src [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee']
     .pipe watch [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee'], (e)->
       path = e.path
@@ -452,14 +421,13 @@ gulp.task 'coffeeConcat', ()->
         target = path.split('/').reverse()[0]
         mobile = path.split('/').reverse()[2]
 
-      if mobile is mobileDir
+      if path.indexOf(mobileDir+'/') isnt -1
         csDestPath = mobileDir+'/'
         isMobile = true
       else
         csDestPath = ''
 
       common = ()->
-        console.log folder is csCommonFolder
         return folder is csCommonFolder
 
       src = []
@@ -485,12 +453,7 @@ gulp.task 'coffeeConcat', ()->
               src[0] = set
               `break getSrc`
 
-      waitMax   = src.length
-      waitCount = 0
-
-      # onEnd = ()->
-      #   if waitMax is ++waitCount
-      #     callback()
+      console.log src
 
       for key, val of src
         if common()
@@ -525,6 +488,8 @@ gulp.task 'coffeeConcat', ()->
           .pipe debug(title: 'end concat:')
           # .on 'finish', ()->
           #   onEnd()
+
+  done()
 
 gulp.task 'coffee', ()->
   gulp.src basePath+srcPath+targetPath+csDestDir+'/*.coffee'
