@@ -1,5 +1,5 @@
 @function px2vw($px, $base: 750) {
-	@return unquote(($px / $base * 100)+'vw');
+	@return unquote((($px / ($px * 0 + 1)) / $base * 100)+'vw');
 }
 
 @function margin($margin, $lheight, $base, $unit: 0) {
