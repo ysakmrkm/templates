@@ -35,6 +35,7 @@ svgo  = require('imagemin-svgo')
 jp2  = require('gulp-jpeg-2000')
 jxr  = require('gulp-jpeg-xr')
 webp  = require('imagemin-webp')
+touch  = require('gulp-touch-fd')
 browserSync = require('browser-sync').create()
 minimist = require('minimist')
 replace = require('gulp-replace')
@@ -325,6 +326,7 @@ gulp.task 'sass', ()->
     # .pipe remember('sass')
     # .pipe replace('src/', '')
     .pipe gulp.dest(basePath+cssDestDir+"/#{targetPath}")
+    .pipe(touch())
     .pipe browserSync.stream()
 
 gulp.task 'autoprefixer', ()->
@@ -374,6 +376,7 @@ gulp.task 'jade', ()->
       extname: '.php'
     )
     .pipe gulp.dest(basePath+viewPath)
+    .pipe(touch())
     .pipe debug(title: 'end jade:')
     # .pipe remember('jade')
     .on('end',

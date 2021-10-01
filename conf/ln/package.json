@@ -47,6 +47,7 @@
     "gulp-sourcemaps": "^2.6.1",
     "gulp-stylefmt": "^1.1.0",
     "gulp-stylelint": "^8.0.0",
+    "gulp-touch-fd": "github:funkedigital/gulp-touch-fd",
     "gulp-uglify": "^3.0.1",
     "gulp-watch": "^5.0.1",
     "imagemin-guetzli": "^2.0.0",
