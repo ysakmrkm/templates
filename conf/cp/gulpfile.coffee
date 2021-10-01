@@ -238,18 +238,24 @@ gulp.task 'imagemin', ()->
     )
 
 gulp.task 'cssmin', ()->
-  gulp.src([basePath+cssDestDir+'/'+targetPath+'**/*.css'])
+  gulp.src([basePath+cssDestDir+'/'+targetPath+'**/*.css', '!'+basePath+cssDestDir+'/'+targetPath+'**/*.min.css'])
     # .pipe sourcemaps.init()
     .pipe cleanCss({rebase: false})
     # .pipe sourcemaps.write(
     #   './'
     #   sourceRoot: '../'+basePath+destPath+cssDestDir
     # )
+    .pipe rename(
+      extname: '.min.css'
+    )
     .pipe gulp.dest(basePath+destPath+targetPath+cssDestDir)
 
 gulp.task 'jsmin', ()->
-  gulp.src([basePath+'js/'+targetPath+'**/*.js'])
+  gulp.src([basePath+'js/'+targetPath+'**/*.js', '!'+basePath+'js/'+targetPath+'**/*.min.js'])
     .pipe uglify()
+    .pipe rename(
+      extname: '.min.js'
+    )
     .pipe gulp.dest(basePath+destPath+targetPath+'js')
 
 gulp.task 'htmlmin', ()->
