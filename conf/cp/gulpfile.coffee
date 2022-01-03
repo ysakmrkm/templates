@@ -17,8 +17,8 @@ cache = require('gulp-cached')
 changed = require('gulp-changed')
 remember = require('gulp-remember')
 watch = require('gulp-watch')
-jade = require('gulp-jade')
-jadeRef = require('gulp-jade/node_modules/jade')
+pug = require('gulp-pug')
+pugRef = require('gulp-pug/node_modules/pug')
 puglint = require('gulp-pug-linter')
 htmlmin = require('gulp-htmlmin')
 rename = require('gulp-rename')
@@ -69,7 +69,7 @@ gulp.task 'webserver', (done)->
 
   done()
 
-jadeRef.filters.php = (block) ->
+pugRef.filters.php = (block) ->
   return "\n<?php\n"+block+"\n?>"
 
 csCommonFolder = 'core'
@@ -345,22 +345,22 @@ gulp.task 'cleanCss', ()->
     .pipe gulp.dest(basePath+destPath+cssDestDir)
 
 gulp.task 'puglint', ()->
-  baseDir = basePath+srcPath+targetPath+'jade/**/*.jade'
+  baseDir = basePath+srcPath+targetPath+'pug/**/*.pug'
 
-  gulp.src "#{baseDir}**/*.jade"
+  gulp.src "#{baseDir}**/*.pug"
     .pipe debug(title: 'start lint:')
     .pipe cache('puglint')
     .pipe puglint({failAfterError: true})
     .pipe debug(title: 'end lint:')
 
-gulp.task 'jade', ()->
-  gulp.src basePath+srcPath+targetPath+'jade/**/[^_]*.jade'
-    # .pipe cache('jade')
-    .pipe debug(title: 'start jade:')
+gulp.task 'pug', ()->
+  gulp.src basePath+srcPath+targetPath+'pug/**/[^_]*.pug'
+    # .pipe cache('pug')
+    .pipe debug(title: 'start pug:')
     .pipe plumber(
       errorHandler:
         notify.onError(
-          title: "jade compile error"
+          title: "pug compile error"
           message: "<%= error %>"
         )
 
@@ -369,7 +369,7 @@ gulp.task 'jade', ()->
     .pipe progeny(
       debug: true
     )
-    .pipe jade(
+    .pipe pug(
       pretty: true
     )
     .pipe rename(
@@ -377,8 +377,8 @@ gulp.task 'jade', ()->
     )
     .pipe gulp.dest(basePath+viewPath)
     .pipe(touch())
-    .pipe debug(title: 'end jade:')
-    # .pipe remember('jade')
+    .pipe debug(title: 'end pug:')
+    # .pipe remember('pug')
     .on('end',
       ()->
         browserSync.reload()
@@ -553,7 +553,7 @@ gulp.task 'watch', (done)->
 
   gulp.watch [basePath+srcPath+targetPath+csDestDir+'/**/*.coffee', '!'+basePath+srcPath+targetPath+csDestDir+'/*.coffee'], gulp.series('coffeeConcat', 'coffee')
 
-  gulp.watch basePath+srcPath+'**/jade/**/*.jade', gulp.series('puglint', 'jade')
+  gulp.watch basePath+srcPath+'**/pug/**/*.pug', gulp.series('puglint', 'pug')
 
   done()
 
