@@ -1,8 +1,6 @@
-@import 'fundation/_property';
-@import 'fundation/_reset';
+@use 'fundation/_reset';
+@use 'fundation/_base';
 
-@include reset;
+@include reset.reset;
 //オリジナル
-@include resethtml5;
-
-@import 'fundation/_base';
+@include reset.resethtml5;

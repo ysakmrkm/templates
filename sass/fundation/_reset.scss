@@ -1,3 +1,5 @@
+@use 'fundation/_property';
+
 @mixin reset {
 	body ,
 	h1 ,
@@ -29,7 +31,7 @@
 	}
 
 	html {
-		font-family: $font_goth;
+		font-family: property.$font_goth;
 		font-size: 10px;
 	}
 

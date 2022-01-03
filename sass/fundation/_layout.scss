@@ -1,3 +1,5 @@
+@use 'fundation/property';
+
 @mixin layout-tags {
 	html ,
 	body {
@@ -12,11 +14,11 @@
 		& ,
 		&::before ,
 		&::after {
-			transition: background-color $mouseover linear, background-image $mouseover linear;
+			transition: background-color property.$mouseover linear, background-image property.$mouseover linear;
 		}
 
 		> * {
-			transition: opacity $mouseover linear;
+			transition: opacity property.$mouseover linear;
 		}
 
 		img {
