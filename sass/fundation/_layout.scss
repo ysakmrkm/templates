@@ -33,8 +33,10 @@
 				text-decoration: none;
 			}
 		}
+	}
 
-		&[href^="tel:"] {
+	@media (min-width: 750px) {
+		a[href^="tel:"] {
 			pointer-events: none;
 		}
 	}
