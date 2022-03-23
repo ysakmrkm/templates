@@ -330,7 +330,7 @@ gulp.task 'sass', ()->
     .pipe browserSync.stream()
 
 gulp.task 'autoprefixer', ()->
-  gulp.src [ basePath+basePath+cssDestDir+'/'+targetPath+'**/*.css']
+  gulp.src [ basePath+cssDestDir+'/'+targetPath+'**/*.css']
     .pipe debug(title: 'start autoprefixer:')
     .pipe autoprefixer()
     .pipe debug(title: 'end autoprefixer:')
