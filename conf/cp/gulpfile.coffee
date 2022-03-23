@@ -338,16 +338,12 @@ gulp.task 'autoprefixer', ()->
     .pipe browserSync.stream()
 
 gulp.task 'cleanCss', ()->
-  baseDir = basePath+cssDestDir+"/"
-
-  gulp.src "#{baseDir}**/*first.css"
+  gulp.src basePath+cssDestDir+'/**/*first.css'
     .pipe cleanCss()
     .pipe gulp.dest(basePath+destPath+cssDestDir)
 
 gulp.task 'puglint', ()->
-  baseDir = basePath+srcPath+targetPath+'pug/**/*.pug'
-
-  gulp.src "#{baseDir}**/*.pug"
+  gulp.src basePath+srcPath+targetPath+'pug/**/*.pug'
     .pipe debug(title: 'start lint:')
     .pipe cache('puglint')
     .pipe puglint({failAfterError: true})
