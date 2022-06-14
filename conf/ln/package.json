@@ -60,6 +60,7 @@
     "imagemin-webp": "^6.0.0",
     "imagemin-svgo": "^9.0.0",
     "minimist": "^1.2.5",
+    "nodemon": "^1.19.0",
     "node-sass-asset-functions": "^0.1.0",
     "postcss-scss": "^4.0.2",
     "postcss-sorting": "^7.0.1",
